@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import createHttpError from "http-errors";
+import { authRouter } from "./routes";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 const PORT = process.env.PORT || 8080;
@@ -20,6 +21,9 @@ const main = async () => {
     app.get("/", (req, res) => {
         res.status(200).json({ message: "Working" });
     });
+
+    // Routes
+    app.use("/auth", authRouter);
 
     app.use((req, res, next) => {
         return next(
