@@ -1,17 +1,32 @@
 import express from "express";
-import SpotifyWebApi from "spotify-web-api-node";
-import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "../constants";
 import { spotifyApi } from "../services";
 
 export const authRouter = express.Router();
 
 authRouter.get("/", async (req, res, next) => {
-    await spotifyApi.pause();
-    return res.status(200).json({ message: "Working" });
+    try {
+        console.log(spotifyApi.getAccessToken());
+        const currentUser = await spotifyApi.getMe();
+
+        return res.status(200).json({
+            message: "Working",
+            status: currentUser.body,
+        });
+    } catch (e) {
+        next(e);
+    }
 });
 
 authRouter.get("/login", (req, res, next) => {
-    const scopes = ["user-read-private", "user-read-email"];
+    const scopes = [
+        "user-read-private",
+        "user-read-email",
+        "user-read-playback-state",
+        "user-read-currently-playing",
+        "user-modify-playback-state",
+        "app-remote-control",
+        "streaming",
+    ];
 
     const authUrl = spotifyApi.createAuthorizeURL(
         scopes,
