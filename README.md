@@ -1,0 +1,1 @@
+# vscode-spotify-controller
