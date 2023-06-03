@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import createHttpError from "http-errors";
-import { authRouter } from "./routes";
+import { authRouter, statusRoutes } from "./routes";
+import { protectedRoute } from "./middlewares";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 const PORT = process.env.PORT || 8080;
@@ -24,6 +25,7 @@ const main = async () => {
 
     // Routes
     app.use("/auth", authRouter);
+    app.use("/status", statusRoutes);
 
     app.use((req, res, next) => {
         return next(
@@ -35,7 +37,17 @@ const main = async () => {
 
     app.use((err: any, req: Request, res: Response, next: NextFunction) => {
         if (err instanceof createHttpError.HttpError) {
-            return res.status(err.statusCode).json({ message: err.message });
+            let object: any = { message: err.message };
+            if (err.statusCode === 401) {
+                object = {
+                    ...object,
+                    actions: {
+                        message: "Please Login To set the token",
+                        url: "http://localhost:8080/auth/login",
+                    },
+                };
+            }
+            return res.status(err.statusCode).json({ ...object });
         }
         return res.status(500).json({ err });
     });
