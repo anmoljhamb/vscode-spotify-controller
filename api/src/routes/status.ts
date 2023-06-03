@@ -11,4 +11,11 @@ statusRoutes.get("/", async (req, res, next) => {
     return res.status(200).json({ message: "Working" });
 });
 
-statusRoutes.get("/currentTrack", (req, res, next) => {});
+statusRoutes.get("/currentTrack", async (req, res, next) => {
+    try {
+        const resp = await spotifyApi.getMyCurrentPlayingTrack();
+        return res.status(200).json({ message: "working", resp });
+    } catch (e) {
+        return next(e);
+    }
+});
