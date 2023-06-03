@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import createHttpError from "http-errors";
-import { authRouter, statusRoutes } from "./routes";
+import { authRouter, controlRouter, statusRoutes } from "./routes";
 import { protectedRoute } from "./middlewares";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
@@ -26,6 +26,7 @@ const main = async () => {
     // Routes
     app.use("/auth", authRouter);
     app.use("/status", statusRoutes);
+    app.use("/control", controlRouter);
 
     app.use((req, res, next) => {
         return next(
