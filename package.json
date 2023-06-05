@@ -74,6 +74,11 @@
                 "command": "spotify-controller.prevSong",
                 "category": "SpotifyController",
                 "title": "Previous Song"
+            },
+            {
+                "command": "spotify-controller.setVolume",
+                "category": "SpotifyController",
+                "title": "Set Volume"
             }
         ],
         "configuration": [

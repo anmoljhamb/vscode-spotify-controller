@@ -47,6 +47,8 @@ export async function activate(context: vscode.ExtensionContext) {
         updateIsLoggedIn(false);
     }
 
+    commands.forEach((command) => registerSpotifyCommand(command));
+
     registerCommand("login", false, () => {
         vscode.window.showInformationMessage(
             "Opening the login url. Please Authenticate."
@@ -64,7 +66,32 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
-    commands.forEach((command) => registerSpotifyCommand(command));
+    registerCommand("setVolume", true, async () => {
+        const resp = await vscode.window.showInputBox({
+            title: "Set Volume",
+            validateInput(value) {
+                try {
+                    const temp = Number.parseInt(value);
+                    if (temp < 0 || temp > 100)
+                        throw new Error("Invalid Choice");
+                } catch (e) {
+                    return "The value needs to be in the range [0, 100].";
+                }
+            },
+        });
+        if (!resp || resp.length === 0) return;
+        try {
+            await handleCommand({
+                handlerId: "setVolume",
+                payload: resp,
+            });
+        } catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showInformationMessage(e.message);
+            }
+            console.log(e);
+        }
+    });
 
     registerCommand("playPause", true, async () => {
         try {
@@ -131,6 +158,13 @@ export async function activate(context: vscode.ExtensionContext) {
                 return await spotifyApi.setShuffle(payload);
             case "repeat":
                 return await spotifyApi.setRepeat(payload);
+            case "setVolume":
+                return await spotifyApi.setVolume(payload);
+            default:
+                vscode.window.showWarningMessage(
+                    "The given command was not found."
+                );
+                return;
         }
     }
 }

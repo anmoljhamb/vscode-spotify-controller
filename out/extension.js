@@ -45,6 +45,7 @@ async function activate(context) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");
         (0, utils_1.updateIsLoggedIn)(false);
     }
+    constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", false, () => {
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
         vscode.env.openExternal(vscode.Uri.parse(`${constants_1.BACKEND_URI}/auth/login`));
@@ -56,7 +57,35 @@ async function activate(context) {
         utils_1.spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
-    constants_1.commands.forEach((command) => registerSpotifyCommand(command));
+    registerCommand("setVolume", true, async () => {
+        const resp = await vscode.window.showInputBox({
+            title: "Set Volume",
+            validateInput(value) {
+                try {
+                    const temp = Number.parseInt(value);
+                    if (temp < 0 || temp > 100)
+                        throw new Error("Invalid Choice");
+                }
+                catch (e) {
+                    return "The value needs to be in the range [0, 100].";
+                }
+            },
+        });
+        if (!resp || resp.length === 0)
+            return;
+        try {
+            await handleCommand({
+                handlerId: "setVolume",
+                payload: resp,
+            });
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showInformationMessage(e.message);
+            }
+            console.log(e);
+        }
+    });
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
@@ -100,6 +129,11 @@ async function activate(context) {
                 return await utils_1.spotifyApi.setShuffle(payload);
             case "repeat":
                 return await utils_1.spotifyApi.setRepeat(payload);
+            case "setVolume":
+                return await utils_1.spotifyApi.setVolume(payload);
+            default:
+                vscode.window.showWarningMessage("The given command was not found.");
+                return;
         }
     }
 }
