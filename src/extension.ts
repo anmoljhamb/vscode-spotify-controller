@@ -15,6 +15,7 @@ import {
     refreshToken,
     setAccessToken,
     setRefreshInterval,
+    setRefreshToken,
     spotifyApi,
     updateGlobalState,
     updateIsLoggedIn,
@@ -49,6 +50,16 @@ export async function activate(context: vscode.ExtensionContext) {
             "Opening the login url. Please Authenticate."
         );
         vscode.env.openExternal(vscode.Uri.parse(`${BACKEND_URI}/auth/login`));
+    });
+
+    registerCommand("logout", false, async () => {
+        await setAccessToken("");
+        await setRefreshToken("");
+        spotifyApi.setAccessToken("");
+        spotifyApi.setRefreshToken("");
+        vscode.window.showInformationMessage(
+            "Spotify account was successfully logged out"
+        );
     });
 
     registerCommand("playPause", true, async () => {

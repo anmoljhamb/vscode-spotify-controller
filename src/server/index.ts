@@ -1,3 +1,4 @@
+import * as vscode from "vscode";
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import dotenv from "dotenv";

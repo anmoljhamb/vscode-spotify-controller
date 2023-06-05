@@ -49,6 +49,13 @@ async function activate(context) {
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
         vscode.env.openExternal(vscode.Uri.parse(`${constants_1.BACKEND_URI}/auth/login`));
     });
+    registerCommand("logout", false, async () => {
+        await (0, utils_1.setAccessToken)("");
+        await (0, utils_1.setRefreshToken)("");
+        utils_1.spotifyApi.setAccessToken("");
+        utils_1.spotifyApi.setRefreshToken("");
+        vscode.window.showInformationMessage("Spotify account was successfully logged out");
+    });
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();

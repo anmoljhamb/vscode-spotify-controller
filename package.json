@@ -21,6 +21,11 @@
                 "title": "Login"
             },
             {
+                "command": "spotify-controller.logout",
+                "category": "SpotifyController",
+                "title": "Logout"
+            },
+            {
                 "command": "spotify-controller.playPause",
                 "category": "SpotifyController",
                 "title": "Play Pause"
