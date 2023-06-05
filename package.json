@@ -81,6 +81,16 @@
                 "title": "Play Track"
             },
             {
+                "command": "spotify-controller.addToQueueWithoutConfirmation",
+                "category": "SpotifyController",
+                "title": "Add To Queue Without Confirmation"
+            },
+            {
+                "command": "spotify-controller.addToQueue",
+                "category": "SpotifyController",
+                "title": "Add To Queue"
+            },
+            {
                 "command": "spotify-controller.playTrackWithoutConfirmation",
                 "category": "SpotifyController",
                 "title": "Play Track Without Confirmation"

@@ -165,6 +165,26 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    registerCommand(
+        "addToQueue",
+        true,
+        playTrackTemplate({
+            title: "Add Track To Queue",
+            handlerId: "addToQueue",
+            confirm: true,
+        })
+    );
+
+    registerCommand(
+        "addToQueueWithoutConfirmation",
+        true,
+        playTrackTemplate({
+            title: "Add Track To Queue",
+            handlerId: "addToQueueWithoutConfirmation",
+            confirm: false,
+        })
+    );
+
     registerCommand("seek", true, async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
@@ -304,6 +324,9 @@ export async function activate(context: vscode.ExtensionContext) {
             case "playTrack":
                 await spotifyApi.addToQueue(payload);
                 return await spotifyApi.skipToNext();
+            case "addToQueueWithoutConfirmation":
+            case "addToQueue":
+                return await spotifyApi.addToQueue(payload);
             default:
                 vscode.window.showWarningMessage(
                     "The given command was not found."
