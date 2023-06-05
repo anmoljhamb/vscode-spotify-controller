@@ -23,11 +23,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
+exports.CLIENT_SECRET = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
 const vscode = __importStar(require("vscode"));
 exports.appId = "spotify-controller";
 exports.PORT = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerApiPort");
 exports.BACKEND_URI = `http://localhost:${exports.PORT}`;
+exports.CLIENT_ID = vscode.workspace
+    .getConfiguration()
+    .get("spotifyControllerClientId");
+exports.CLIENT_SECRET = vscode.workspace
+    .getConfiguration()
+    .get("spotifyControllerClientSecret");
 //# sourceMappingURL=constants.js.map

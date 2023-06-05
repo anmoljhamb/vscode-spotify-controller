@@ -42,6 +42,8 @@ async function activate(context) {
     else {
         console.log(authKey);
     }
+    console.log(constants_1.CLIENT_ID);
+    console.log(constants_1.CLIENT_SECRET);
     registerCommand("playPause", true, () => {
         vscode.window.showInformationMessage("The song was played/paused.");
     });

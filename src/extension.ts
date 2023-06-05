@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { app } from "./api";
-import { PORT, appId } from "./constants";
+import { CLIENT_ID, CLIENT_SECRET, PORT, appId } from "./constants";
 import {
     getAuthToken,
     protectedCommand,
@@ -23,6 +23,9 @@ export async function activate(context: vscode.ExtensionContext) {
     } else {
         console.log(authKey);
     }
+
+    console.log(CLIENT_ID);
+    console.log(CLIENT_SECRET);
 
     registerCommand("playPause", true, () => {
         vscode.window.showInformationMessage("The song was played/paused.");
