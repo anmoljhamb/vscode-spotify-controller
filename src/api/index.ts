@@ -6,6 +6,7 @@ import cors from "cors";
 import createHttpError from "http-errors";
 import { authRouter, controlRouter, statusRoutes } from "./routes";
 import { protectedRoute } from "./middlewares";
+import { BACKEND_URI } from "../constants";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
@@ -41,7 +42,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
                 ...object,
                 actions: {
                     message: "Please Login To set the token",
-                    url: "http://localhost:8080/auth/login",
+                    url: `${BACKEND_URI}/auth/login`,
                 },
             };
         }

@@ -11,6 +11,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const routes_1 = require("./routes");
+const constants_1 = require("../constants");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
 exports.app = (0, express_1.default)();
 // 3rd party middlewares.
@@ -36,7 +37,7 @@ exports.app.use((err, req, res, next) => {
                 ...object,
                 actions: {
                     message: "Please Login To set the token",
-                    url: "http://localhost:8080/auth/login",
+                    url: `${constants_1.BACKEND_URI}/auth/login`,
                 },
             };
         }
