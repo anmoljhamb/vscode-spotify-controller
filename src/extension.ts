@@ -82,10 +82,14 @@ export async function activate(context: vscode.ExtensionContext) {
     registerSpotifyCommand({
         commandId: "shuffleOff",
         successMsg: "The shuffle was turned off successfully!",
+        handlerId: "shuffle",
+        payload: false,
     });
     registerSpotifyCommand({
         commandId: "shuffleOn",
         successMsg: "The shuffle was turned on successfully!",
+        handlerId: "shuffle",
+        payload: true,
     });
 
     registerCommand("playPause", true, async () => {
@@ -117,13 +121,18 @@ export async function activate(context: vscode.ExtensionContext) {
     function registerSpotifyCommand({
         commandId,
         successMsg,
+        handlerId,
+        payload,
     }: {
         commandId: string;
         successMsg: string;
+        handlerId?: string;
+        payload?: any;
     }) {
         registerCommand(commandId, true, async () => {
             try {
-                await handleCommand(commandId);
+                if (!handlerId) handlerId = commandId;
+                await handleCommand({ handlerId, payload });
                 vscode.window.showInformationMessage(successMsg);
             } catch (e) {
                 if (e instanceof Error)
@@ -133,8 +142,14 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     }
 
-    async function handleCommand(commandId: string) {
-        switch (commandId) {
+    async function handleCommand({
+        handlerId,
+        payload,
+    }: {
+        handlerId: string;
+        payload?: any;
+    }) {
+        switch (handlerId) {
             case "nextSong":
                 return await spotifyApi.skipToNext();
             case "prevSong":
@@ -143,10 +158,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 return await spotifyApi.pause();
             case "play":
                 return await spotifyApi.play();
-            case "shuffleOn":
-                return await spotifyApi.setShuffle(true);
-            case "shuffleOff":
-                return await spotifyApi.setShuffle(false);
+            case "shuffle":
+                return await spotifyApi.setShuffle(payload);
         }
     }
 }
