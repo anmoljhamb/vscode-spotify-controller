@@ -33,23 +33,39 @@ const server = server_1.app.listen(constants_1.PORT, () => {
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
-    const authKey = await (0, utils_1.getAccessToken)();
-    if (!authKey) {
-        console.log("setting authKey");
-        await (0, utils_1.setAccessToken)("thisismysupersecretauthkey");
-        console.log(await (0, utils_1.getAccessToken)());
+    utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
+    utils_1.spotifyApi.setRefreshToken((await (0, utils_1.getRefreshToken)()));
+    try {
+        const user = await utils_1.spotifyApi.getMe();
+        (0, utils_1.updateIsLoggedIn)(true);
     }
-    else {
-        console.log(authKey);
+    catch (e) {
+        vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");
+        (0, utils_1.updateIsLoggedIn)(false);
     }
-    console.log(constants_1.CLIENT_ID);
-    console.log(constants_1.CLIENT_SECRET);
     registerCommand("login", false, () => {
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
         vscode.env.openExternal(vscode.Uri.parse(`${constants_1.BACKEND_URI}/auth/login`));
     });
-    registerCommand("playPause", true, () => {
-        vscode.window.showInformationMessage("The song was played/paused.");
+    registerCommand("playPause", true, async () => {
+        try {
+            const isPlaying = await (0, utils_1.getPlayingStatus)();
+            let message;
+            if (isPlaying) {
+                utils_1.spotifyApi.pause();
+                message = "The song was paused";
+            }
+            else {
+                utils_1.spotifyApi.play();
+                message = "The song was resumed";
+            }
+            vscode.window.showInformationMessage(message);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showErrorMessage(e.message);
+            }
+        }
     });
     registerCommand("helloWorld", false, () => {
         vscode.window.showInformationMessage("Hello World from the spotify controller extension.");

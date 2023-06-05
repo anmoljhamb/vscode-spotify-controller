@@ -23,9 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.protectedCommand = exports.isLoggedIn = void 0;
+exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
 const vscode = __importStar(require("vscode"));
 exports.isLoggedIn = false;
+let updateIsLoggedIn = (status) => (exports.isLoggedIn = status);
+exports.updateIsLoggedIn = updateIsLoggedIn;
 const protectedCommand = (callback) => {
     if (exports.isLoggedIn)
         return callback;

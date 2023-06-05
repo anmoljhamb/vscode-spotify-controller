@@ -8,9 +8,14 @@ import {
 } from "./constants";
 import {
     getAccessToken,
+    getPlayingStatus,
+    getRefreshToken,
+    isLoggedIn,
     protectedCommand,
     setAccessToken,
+    spotifyApi,
     updateGlobalState,
+    updateIsLoggedIn,
 } from "./utils";
 import { app } from "./server";
 
@@ -21,17 +26,18 @@ const server = app.listen(PORT, () => {
 export async function activate(context: vscode.ExtensionContext) {
     updateGlobalState(context.globalState);
 
-    const authKey = await getAccessToken();
-    if (!authKey) {
-        console.log("setting authKey");
-        await setAccessToken("thisismysupersecretauthkey");
-        console.log(await getAccessToken());
-    } else {
-        console.log(authKey);
-    }
+    spotifyApi.setAccessToken((await getAccessToken()) as string);
+    spotifyApi.setRefreshToken((await getRefreshToken()) as string);
 
-    console.log(CLIENT_ID);
-    console.log(CLIENT_SECRET);
+    try {
+        const user = await spotifyApi.getMe();
+        updateIsLoggedIn(true);
+    } catch (e) {
+        vscode.window.showWarningMessage(
+            "Spotify Controller Not Logged In. Please Login"
+        );
+        updateIsLoggedIn(false);
+    }
 
     registerCommand("login", false, () => {
         vscode.window.showInformationMessage(
@@ -40,8 +46,23 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.env.openExternal(vscode.Uri.parse(`${BACKEND_URI}/auth/login`));
     });
 
-    registerCommand("playPause", true, () => {
-        vscode.window.showInformationMessage("The song was played/paused.");
+    registerCommand("playPause", true, async () => {
+        try {
+            const isPlaying = await getPlayingStatus();
+            let message: string;
+            if (isPlaying) {
+                spotifyApi.pause();
+                message = "The song was paused";
+            } else {
+                spotifyApi.play();
+                message = "The song was resumed";
+            }
+            vscode.window.showInformationMessage(message);
+        } catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showErrorMessage(e.message);
+            }
+        }
     });
 
     registerCommand("helloWorld", false, () => {
