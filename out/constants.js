@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CLIENT_SECRET = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
+exports.REDIRECT_URI = exports.CLIENT_SECRET = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
 const vscode = __importStar(require("vscode"));
 exports.appId = "spotify-controller";
 exports.PORT = vscode.workspace
@@ -36,4 +36,5 @@ exports.CLIENT_ID = vscode.workspace
 exports.CLIENT_SECRET = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerClientSecret");
+exports.REDIRECT_URI = `${exports.BACKEND_URI}/auth/callback`;
 //# sourceMappingURL=constants.js.map
