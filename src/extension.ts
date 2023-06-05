@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { app } from "./api";
-import { appId } from "./constants";
+import { PORT, appId } from "./constants";
 import {
     getAuthToken,
     protectedCommand,
@@ -8,8 +8,8 @@ import {
     updateGlobalState,
 } from "./utils";
 
-const server = app.listen(8080, () => {
-    console.log(`Listening on the url *:8080`);
+const server = app.listen(PORT, () => {
+    console.log(`Listening on the url *:${PORT}`);
 });
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -50,6 +50,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
     server.close(() => {
-        console.log(`Stopped listening on the url *:8080`);
+        console.log(`Stopped listening on the url *:${PORT}`);
     });
 }

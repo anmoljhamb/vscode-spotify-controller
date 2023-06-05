@@ -25,6 +25,18 @@
                 "category": "SpotifyController",
                 "title": "Hello World"
             }
+        ],
+        "configuration": [
+            {
+                "title": "Spotify Controller",
+                "properties": {
+                    "spotifyControllerApiPort": {
+                        "description": "Run the API server on the given port",
+                        "type": "number",
+                        "default": 61234
+                    }
+                }
+            }
         ]
     },
     "scripts": {

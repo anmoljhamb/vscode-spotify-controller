@@ -28,8 +28,8 @@ const vscode = __importStar(require("vscode"));
 const api_1 = require("./api");
 const constants_1 = require("./constants");
 const utils_1 = require("./utils");
-const server = api_1.app.listen(8080, () => {
-    console.log(`Listening on the url *:8080`);
+const server = api_1.app.listen(constants_1.PORT, () => {
+    console.log(`Listening on the url *:${constants_1.PORT}`);
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
@@ -55,7 +55,7 @@ async function activate(context) {
 exports.activate = activate;
 function deactivate() {
     server.close(() => {
-        console.log(`Stopped listening on the url *:8080`);
+        console.log(`Stopped listening on the url *:${constants_1.PORT}`);
     });
 }
 exports.deactivate = deactivate;
