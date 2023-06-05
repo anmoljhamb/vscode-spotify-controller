@@ -12,6 +12,7 @@ import {
     getRefreshToken,
     isLoggedIn,
     protectedCommand,
+    refreshToken,
     setAccessToken,
     spotifyApi,
     updateGlobalState,
@@ -25,6 +26,8 @@ const server = app.listen(PORT, () => {
 
 export async function activate(context: vscode.ExtensionContext) {
     updateGlobalState(context.globalState);
+
+    await refreshToken();
 
     spotifyApi.setAccessToken((await getAccessToken()) as string);
     spotifyApi.setRefreshToken((await getRefreshToken()) as string);

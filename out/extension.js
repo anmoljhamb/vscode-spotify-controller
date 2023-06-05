@@ -33,6 +33,7 @@ const server = server_1.app.listen(constants_1.PORT, () => {
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
+    await (0, utils_1.refreshToken)();
     utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
     utils_1.spotifyApi.setRefreshToken((await (0, utils_1.getRefreshToken)()));
     try {

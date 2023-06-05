@@ -1,4 +1,10 @@
 import * as vscode from "vscode";
+import {
+    getRefreshToken,
+    setAccessToken,
+    setRefreshToken,
+} from "./tokenManager";
+import { spotifyApi } from "./spotify";
 
 export let isLoggedIn = false;
 
@@ -12,3 +18,20 @@ export const protectedCommand = (callback: () => void) => {
         );
     };
 };
+
+export const refreshToken = async () => {
+    console.log("refreshing token");
+    spotifyApi.setRefreshToken((await getRefreshToken()) as string);
+    try {
+        let resp = await spotifyApi.refreshAccessToken();
+        await setAccessToken(resp.body.access_token);
+        let _refreshToken = resp.body.refresh_token;
+        if (_refreshToken) await setRefreshToken(_refreshToken);
+    } catch (e) {
+        console.log(e);
+        await setAccessToken("");
+        await setRefreshToken("");
+    }
+};
+
+export const intervalTime = (3600 - 60) * 1000;

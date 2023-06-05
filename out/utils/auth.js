@@ -23,8 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
+exports.intervalTime = exports.refreshToken = exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
 const vscode = __importStar(require("vscode"));
+const tokenManager_1 = require("./tokenManager");
+const spotify_1 = require("./spotify");
 exports.isLoggedIn = false;
 let updateIsLoggedIn = (status) => (exports.isLoggedIn = status);
 exports.updateIsLoggedIn = updateIsLoggedIn;
@@ -36,4 +38,22 @@ const protectedCommand = (callback) => {
     };
 };
 exports.protectedCommand = protectedCommand;
+const refreshToken = async () => {
+    console.log("refreshing token");
+    spotify_1.spotifyApi.setRefreshToken((await (0, tokenManager_1.getRefreshToken)()));
+    try {
+        let resp = await spotify_1.spotifyApi.refreshAccessToken();
+        await (0, tokenManager_1.setAccessToken)(resp.body.access_token);
+        let _refreshToken = resp.body.refresh_token;
+        if (_refreshToken)
+            await (0, tokenManager_1.setRefreshToken)(_refreshToken);
+    }
+    catch (e) {
+        console.log(e);
+        await (0, tokenManager_1.setAccessToken)("");
+        await (0, tokenManager_1.setRefreshToken)("");
+    }
+};
+exports.refreshToken = refreshToken;
+exports.intervalTime = (3600 - 60) * 1000;
 //# sourceMappingURL=auth.js.map
