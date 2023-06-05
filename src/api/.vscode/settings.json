@@ -1,7 +1,0 @@
-{
-    "exportall.config.folderListener": [
-        "/src/routes",
-        "/src/services",
-        "/src/middlewares"
-    ]
-}
