@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -12,42 +13,39 @@ const http_errors_1 = __importDefault(require("http-errors"));
 const routes_1 = require("./routes");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
 const PORT = process.env.PORT || 8080;
-const main = async () => {
-    const app = (0, express_1.default)();
-    // 3rd party middlewares.
-    app.use((0, morgan_1.default)("dev"));
-    app.use((0, cors_1.default)());
-    app.use(express_1.default.urlencoded({ extended: true }));
-    app.use(express_1.default.json());
-    app.get("/", (req, res) => {
-        res.status(200).json({ message: "Working" });
-    });
-    // Routes
-    app.use("/auth", routes_1.authRouter);
-    app.use("/status", routes_1.statusRoutes);
-    app.use("/control", routes_1.controlRouter);
-    app.use((req, res, next) => {
-        return next(new http_errors_1.default.NotFound(`The requested '${req.url}' url was not found.`));
-    });
-    app.use((err, req, res, next) => {
-        if (err instanceof http_errors_1.default.HttpError) {
-            let object = { message: err.message };
-            if (err.statusCode === 401) {
-                object = {
-                    ...object,
-                    actions: {
-                        message: "Please Login To set the token",
-                        url: "http://localhost:8080/auth/login",
-                    },
-                };
-            }
-            return res.status(err.statusCode).json({ ...object });
+exports.app = (0, express_1.default)();
+// 3rd party middlewares.
+exports.app.use((0, morgan_1.default)("dev"));
+exports.app.use((0, cors_1.default)());
+exports.app.use(express_1.default.urlencoded({ extended: true }));
+exports.app.use(express_1.default.json());
+exports.app.get("/", (req, res) => {
+    res.status(200).json({ message: "Working" });
+});
+// Routes
+exports.app.use("/auth", routes_1.authRouter);
+exports.app.use("/status", routes_1.statusRoutes);
+exports.app.use("/control", routes_1.controlRouter);
+exports.app.use((req, res, next) => {
+    return next(new http_errors_1.default.NotFound(`The requested '${req.url}' url was not found.`));
+});
+exports.app.use((err, req, res, next) => {
+    if (err instanceof http_errors_1.default.HttpError) {
+        let object = { message: err.message };
+        if (err.statusCode === 401) {
+            object = {
+                ...object,
+                actions: {
+                    message: "Please Login To set the token",
+                    url: "http://localhost:8080/auth/login",
+                },
+            };
         }
-        return res.status(500).json({ err });
-    });
-    app.listen(PORT, () => {
-        console.log(`Listening on the url http://localhost:${PORT}`);
-    });
-};
-main();
+        return res.status(err.statusCode).json({ ...object });
+    }
+    return res.status(500).json({ err });
+});
+exports.app.listen(PORT, () => {
+    console.log(`Listening on the url http://localhost:${PORT}`);
+});
 //# sourceMappingURL=index.js.map

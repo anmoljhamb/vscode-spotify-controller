@@ -25,6 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
+const api_1 = require("./api");
+const server = api_1.app.listen(8080, () => {
+    console.log(`Listening on the url *:8080`);
+});
 function activate(context) {
     console.log('Congratulations, your extension "spotify-controller" is now active!');
     let disposable = vscode.commands.registerCommand("spotify-controller.helloWorld", () => {
@@ -33,7 +37,10 @@ function activate(context) {
     context.subscriptions.push(disposable);
 }
 exports.activate = activate;
-// This method is called when your extension is deactivated
-function deactivate() { }
+function deactivate() {
+    server.close(() => {
+        console.log(`Stopped listening on the url *:8080`);
+    });
+}
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map
