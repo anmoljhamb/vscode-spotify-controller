@@ -41,6 +41,16 @@
                 "title": "Play"
             },
             {
+                "command": "spotify-controller.shuffleOff",
+                "category": "SpotifyController",
+                "title": "Shuffle Off"
+            },
+            {
+                "command": "spotify-controller.shuffleOn",
+                "category": "SpotifyController",
+                "title": "Shuffle On"
+            },
+            {
                 "command": "spotify-controller.nextSong",
                 "category": "SpotifyController",
                 "title": "Next Song"
@@ -49,11 +59,6 @@
                 "command": "spotify-controller.prevSong",
                 "category": "SpotifyController",
                 "title": "Previous Song"
-            },
-            {
-                "command": "spotify-controller.helloWorld",
-                "category": "SpotifyController",
-                "title": "Hello World"
             }
         ],
         "configuration": [

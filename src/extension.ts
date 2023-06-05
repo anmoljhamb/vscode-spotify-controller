@@ -67,6 +67,14 @@ export async function activate(context: vscode.ExtensionContext) {
     registerSpotifyCommand("nextSong", "The song was skipped to next.");
     registerSpotifyCommand("pause", "The song was paused successfully.");
     registerSpotifyCommand("play", "The song was resumed successfully.");
+    registerSpotifyCommand(
+        "shuffleOff",
+        "The shuffle was turned off successfully!"
+    );
+    registerSpotifyCommand(
+        "shuffleOn",
+        "The shuffle was turned on successfully!"
+    );
 
     registerCommand("playPause", true, async () => {
         try {
@@ -79,12 +87,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage(e.message);
             }
         }
-    });
-
-    registerCommand("helloWorld", false, () => {
-        vscode.window.showInformationMessage(
-            "Hello World from the spotify controller extension."
-        );
     });
 
     function registerCommand(
@@ -123,6 +125,10 @@ export async function activate(context: vscode.ExtensionContext) {
                 return await spotifyApi.pause();
             case "play":
                 return await spotifyApi.play();
+            case "shuffleOn":
+                return await spotifyApi.setShuffle(true);
+            case "shuffleOff":
+                return await spotifyApi.setShuffle(false);
         }
     }
 }

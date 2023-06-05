@@ -60,6 +60,8 @@ async function activate(context) {
     registerSpotifyCommand("nextSong", "The song was skipped to next.");
     registerSpotifyCommand("pause", "The song was paused successfully.");
     registerSpotifyCommand("play", "The song was resumed successfully.");
+    registerSpotifyCommand("shuffleOff", "The shuffle was turned off successfully!");
+    registerSpotifyCommand("shuffleOn", "The shuffle was turned on successfully!");
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
@@ -70,9 +72,6 @@ async function activate(context) {
                 vscode.window.showErrorMessage(e.message);
             }
         }
-    });
-    registerCommand("helloWorld", false, () => {
-        vscode.window.showInformationMessage("Hello World from the spotify controller extension.");
     });
     function registerCommand(commandId, authRequired, func) {
         context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, authRequired ? (0, utils_1.protectedCommand)(func) : func));
@@ -100,6 +99,10 @@ async function activate(context) {
                 return await utils_1.spotifyApi.pause();
             case "play":
                 return await utils_1.spotifyApi.play();
+            case "shuffleOn":
+                return await utils_1.spotifyApi.setShuffle(true);
+            case "shuffleOff":
+                return await utils_1.spotifyApi.setShuffle(false);
         }
     }
 }
