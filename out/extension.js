@@ -60,6 +60,7 @@ async function activate(context) {
     registerCommand("setVolume", true, async () => {
         const resp = await vscode.window.showInputBox({
             title: "Set Volume",
+            prompt: "Enter a value between 0-100",
             validateInput(value) {
                 try {
                     const temp = Number.parseInt(value);
@@ -78,6 +79,33 @@ async function activate(context) {
                 handlerId: "setVolume",
                 payload: resp,
             });
+        }
+        catch (e) {
+            (0, utils_1.handleError)(e);
+        }
+    });
+    registerCommand("switchDevice", true, async () => {
+        const resp = await utils_1.spotifyApi.getMyDevices();
+        let activeDevice = "";
+        const options = resp.body.devices.filter((device) => {
+            if (device.is_active) {
+                activeDevice = device.name;
+            }
+            return !device.is_active;
+        });
+        if (options.length === 0) {
+            vscode.window.showWarningMessage("Cannot activate command. There is only one device available");
+            return;
+        }
+        const choice = await vscode.window.showQuickPick(options.map((option) => option.name), {
+            title: "Switch Device",
+            placeHolder: `Currently playing on ${activeDevice}`,
+        });
+        if (!choice)
+            return;
+        const device = options.filter((val) => val.name === choice).at(0);
+        try {
+            await utils_1.spotifyApi.transferMyPlayback([device.id]);
         }
         catch (e) {
             (0, utils_1.handleError)(e);

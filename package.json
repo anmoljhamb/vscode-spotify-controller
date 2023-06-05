@@ -71,6 +71,11 @@
                 "title": "Next Song"
             },
             {
+                "command": "spotify-controller.switchDevice",
+                "category": "SpotifyController",
+                "title": "Switch Device"
+            },
+            {
                 "command": "spotify-controller.prevSong",
                 "category": "SpotifyController",
                 "title": "Previous Song"
