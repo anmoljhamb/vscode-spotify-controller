@@ -56,52 +56,7 @@ async function activate(context) {
         utils_1.spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
-    registerSpotifyCommand({
-        commandId: "nextSong",
-        successMsg: "The song was skipped to next successfully!",
-    });
-    registerSpotifyCommand({
-        commandId: "prevSong",
-        successMsg: "The song was skipped to previous successfully!",
-    });
-    registerSpotifyCommand({
-        commandId: "pause",
-        successMsg: "The song was paused successfully.",
-    });
-    registerSpotifyCommand({
-        commandId: "play",
-        successMsg: "The song was resumed successfully.",
-    });
-    registerSpotifyCommand({
-        commandId: "shuffleOff",
-        successMsg: "The shuffle was turned off successfully!",
-        handlerId: "shuffle",
-        payload: false,
-    });
-    registerSpotifyCommand({
-        commandId: "shuffleOn",
-        successMsg: "The shuffle was turned on successfully!",
-        handlerId: "shuffle",
-        payload: true,
-    });
-    registerSpotifyCommand({
-        commandId: "setRepeatContext",
-        successMsg: "The repeat was set to the current context",
-        handlerId: "repeat",
-        payload: "context",
-    });
-    registerSpotifyCommand({
-        commandId: "setRepeatTrack",
-        successMsg: "The repeat was set to the current track",
-        handlerId: "repeat",
-        payload: "track",
-    });
-    registerSpotifyCommand({
-        commandId: "setRepeatOff",
-        successMsg: "The repeat was turned off",
-        handlerId: "repeat",
-        payload: "off",
-    });
+    constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();

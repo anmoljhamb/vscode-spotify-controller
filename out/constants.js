@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.REDIRECT_URI = exports.CLIENT_SECRET = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
+exports.commands = exports.REDIRECT_URI = exports.CLIENT_SECRET = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
 const vscode = __importStar(require("vscode"));
 exports.appId = "spotify-controller";
 exports.PORT = vscode.workspace
@@ -37,4 +37,52 @@ exports.CLIENT_SECRET = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerClientSecret");
 exports.REDIRECT_URI = `${exports.BACKEND_URI}/auth/callback`;
+exports.commands = [
+    {
+        commandId: "nextSong",
+        successMsg: "The song was skipped to next successfully!",
+    },
+    {
+        commandId: "prevSong",
+        successMsg: "The song was skipped to previous successfully!",
+    },
+    {
+        commandId: "pause",
+        successMsg: "The song was paused successfully.",
+    },
+    {
+        commandId: "play",
+        successMsg: "The song was resumed successfully.",
+    },
+    {
+        commandId: "shuffleOff",
+        successMsg: "The shuffle was turned off successfully!",
+        handlerId: "shuffle",
+        payload: false,
+    },
+    {
+        commandId: "shuffleOn",
+        successMsg: "The shuffle was turned on successfully!",
+        handlerId: "shuffle",
+        payload: true,
+    },
+    {
+        commandId: "setRepeatContext",
+        successMsg: "The repeat was set to the current context",
+        handlerId: "repeat",
+        payload: "context",
+    },
+    {
+        commandId: "setRepeatTrack",
+        successMsg: "The repeat was set to the current track",
+        handlerId: "repeat",
+        payload: "track",
+    },
+    {
+        commandId: "setRepeatOff",
+        successMsg: "The repeat was turned off",
+        handlerId: "repeat",
+        payload: "off",
+    },
+];
 //# sourceMappingURL=constants.js.map

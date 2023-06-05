@@ -5,6 +5,7 @@ import {
     CLIENT_SECRET,
     PORT,
     appId,
+    commands,
 } from "./constants";
 import {
     getAccessToken,
@@ -63,52 +64,7 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
-    registerSpotifyCommand({
-        commandId: "nextSong",
-        successMsg: "The song was skipped to next successfully!",
-    });
-    registerSpotifyCommand({
-        commandId: "prevSong",
-        successMsg: "The song was skipped to previous successfully!",
-    });
-    registerSpotifyCommand({
-        commandId: "pause",
-        successMsg: "The song was paused successfully.",
-    });
-    registerSpotifyCommand({
-        commandId: "play",
-        successMsg: "The song was resumed successfully.",
-    });
-    registerSpotifyCommand({
-        commandId: "shuffleOff",
-        successMsg: "The shuffle was turned off successfully!",
-        handlerId: "shuffle",
-        payload: false,
-    });
-    registerSpotifyCommand({
-        commandId: "shuffleOn",
-        successMsg: "The shuffle was turned on successfully!",
-        handlerId: "shuffle",
-        payload: true,
-    });
-    registerSpotifyCommand({
-        commandId: "setRepeatContext",
-        successMsg: "The repeat was set to the current context",
-        handlerId: "repeat",
-        payload: "context",
-    });
-    registerSpotifyCommand({
-        commandId: "setRepeatTrack",
-        successMsg: "The repeat was set to the current track",
-        handlerId: "repeat",
-        payload: "track",
-    });
-    registerSpotifyCommand({
-        commandId: "setRepeatOff",
-        successMsg: "The repeat was turned off",
-        handlerId: "repeat",
-        payload: "off",
-    });
+    commands.forEach((command) => registerSpotifyCommand(command));
 
     registerCommand("playPause", true, async () => {
         try {
@@ -141,12 +97,7 @@ export async function activate(context: vscode.ExtensionContext) {
         successMsg,
         handlerId,
         payload,
-    }: {
-        commandId: string;
-        successMsg: string;
-        handlerId?: string;
-        payload?: any;
-    }) {
+    }: RegisterSpotifyCommand) {
         registerCommand(commandId, true, async () => {
             try {
                 if (!handlerId) handlerId = commandId;

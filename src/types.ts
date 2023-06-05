@@ -3,3 +3,10 @@ interface Response<T> {
     headers: Record<string, string>;
     statusCode: number;
 }
+
+interface RegisterSpotifyCommand {
+    commandId: string;
+    successMsg: string;
+    handlerId?: string;
+    payload?: any;
+}
