@@ -58,20 +58,12 @@ async function activate(context) {
     });
     registerSpotifyCommand("prevSong", "The song was skipped to previous.");
     registerSpotifyCommand("nextSong", "The song was skipped to next.");
+    registerSpotifyCommand("pause", "The song was paused successfully.");
+    registerSpotifyCommand("play", "The song was resumed successfully.");
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
-            let message;
-            let resp;
-            if (isPlaying) {
-                resp = await utils_1.spotifyApi.pause();
-                message = "The song was paused";
-            }
-            else {
-                resp = await utils_1.spotifyApi.play();
-                message = "The song was resumed";
-            }
-            vscode.window.showInformationMessage(message);
+            vscode.commands.executeCommand(`${constants_1.appId}.${isPlaying ? "pause" : "play"}`);
         }
         catch (e) {
             if (e instanceof Error) {
@@ -104,6 +96,10 @@ async function activate(context) {
                 return await utils_1.spotifyApi.skipToNext();
             case "prevSong":
                 return await utils_1.spotifyApi.skipToPrevious();
+            case "pause":
+                return await utils_1.spotifyApi.pause();
+            case "play":
+                return await utils_1.spotifyApi.play();
         }
     }
 }
