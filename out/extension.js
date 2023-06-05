@@ -84,6 +84,41 @@ async function activate(context) {
             (0, utils_1.handleError)(e);
         }
     });
+    registerCommand("seek", true, async () => {
+        try {
+            const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
+            if (!resp.body.item)
+                throw new Error("No currently playing track found");
+            const duration_ms = resp.body.item.duration_ms;
+            const duration = Math.round(duration_ms / 1000);
+            const seekTo = await vscode.window.showInputBox({
+                title: "Seek",
+                prompt: `Seek to the given second of currently playing track`,
+                placeHolder: `Enter a value between 0 and ${duration - 1}`,
+                validateInput(value) {
+                    try {
+                        let temp = Number.parseInt(value);
+                        if (temp < 0 || temp > duration) {
+                            throw new Error("Not in the range");
+                        }
+                        return null;
+                    }
+                    catch (e) {
+                        return `The value needs to be in the range [0, ${duration - 1}]`;
+                    }
+                },
+            });
+            if (!seekTo)
+                return;
+            await handleCommand({
+                handlerId: "seek",
+                payload: Number.parseInt(seekTo) * 1000,
+            });
+        }
+        catch (e) {
+            (0, utils_1.handleError)(e);
+        }
+    });
     registerCommand("switchDevice", true, async () => {
         const resp = await utils_1.spotifyApi.getMyDevices();
         let activeDevice = "";
@@ -105,7 +140,10 @@ async function activate(context) {
             return;
         const device = options.filter((val) => val.name === choice).at(0);
         try {
-            await utils_1.spotifyApi.transferMyPlayback([device.id]);
+            handleCommand({
+                handlerId: "switchDevice",
+                payload: [device.id],
+            });
         }
         catch (e) {
             (0, utils_1.handleError)(e);
@@ -152,6 +190,10 @@ async function activate(context) {
                 return await utils_1.spotifyApi.setRepeat(payload);
             case "setVolume":
                 return await utils_1.spotifyApi.setVolume(payload);
+            case "switchDevice":
+                return await utils_1.spotifyApi.transferMyPlayback(payload);
+            case "seek":
+                return await utils_1.spotifyApi.seek(payload);
             default:
                 vscode.window.showWarningMessage("The given command was not found.");
                 return;

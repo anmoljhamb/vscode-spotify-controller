@@ -71,6 +71,11 @@
                 "title": "Next Song"
             },
             {
+                "command": "spotify-controller.seek",
+                "category": "SpotifyController",
+                "title": "Seek"
+            },
+            {
                 "command": "spotify-controller.switchDevice",
                 "category": "SpotifyController",
                 "title": "Switch Device"
