@@ -8,8 +8,6 @@ import { authRouter, controlRouter, statusRoutes } from "./routes";
 import { protectedRoute } from "./middlewares";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
-const PORT = process.env.PORT || 8080;
-
 export const app = express();
 
 // 3rd party middlewares.
@@ -50,8 +48,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
         return res.status(err.statusCode).json({ ...object });
     }
     return res.status(500).json({ err });
-});
-
-app.listen(PORT, () => {
-    console.log(`Listening on the url http://localhost:${PORT}`);
 });

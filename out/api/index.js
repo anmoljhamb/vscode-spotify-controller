@@ -12,7 +12,6 @@ const cors_1 = __importDefault(require("cors"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const routes_1 = require("./routes");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
-const PORT = process.env.PORT || 8080;
 exports.app = (0, express_1.default)();
 // 3rd party middlewares.
 exports.app.use((0, morgan_1.default)("dev"));
@@ -44,8 +43,5 @@ exports.app.use((err, req, res, next) => {
         return res.status(err.statusCode).json({ ...object });
     }
     return res.status(500).json({ err });
-});
-exports.app.listen(PORT, () => {
-    console.log(`Listening on the url http://localhost:${PORT}`);
 });
 //# sourceMappingURL=index.js.map

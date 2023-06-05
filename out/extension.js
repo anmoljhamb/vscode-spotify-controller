@@ -30,11 +30,9 @@ const server = api_1.app.listen(8080, () => {
     console.log(`Listening on the url *:8080`);
 });
 function activate(context) {
-    console.log('Congratulations, your extension "spotify-controller" is now active!');
-    let disposable = vscode.commands.registerCommand("spotify-controller.helloWorld", () => {
-        vscode.window.showInformationMessage("Hello World from SpotifyController!");
-    });
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(vscode.commands.registerCommand("spotify-controller.helloWorld", () => {
+        vscode.window.showInformationMessage("Hello world from the vscode spotify controller");
+    }));
 }
 exports.activate = activate;
 function deactivate() {

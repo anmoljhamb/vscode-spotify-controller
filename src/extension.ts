@@ -6,20 +6,13 @@ const server = app.listen(8080, () => {
 });
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log(
-        'Congratulations, your extension "spotify-controller" is now active!'
-    );
-
-    let disposable = vscode.commands.registerCommand(
-        "spotify-controller.helloWorld",
-        () => {
+    context.subscriptions.push(
+        vscode.commands.registerCommand("spotify-controller.helloWorld", () => {
             vscode.window.showInformationMessage(
-                "Hello World from SpotifyController!"
+                "Hello world from the vscode spotify controller"
             );
-        }
+        })
     );
-
-    context.subscriptions.push(disposable);
 }
 
 export function deactivate() {
