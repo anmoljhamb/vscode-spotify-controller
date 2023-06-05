@@ -16,6 +16,11 @@
     "contributes": {
         "commands": [
             {
+                "command": "spotify-controller.playPause",
+                "category": "SpotifyController",
+                "title": "Play Pause"
+            },
+            {
                 "command": "spotify-controller.helloWorld",
                 "category": "SpotifyController",
                 "title": "Hello World"

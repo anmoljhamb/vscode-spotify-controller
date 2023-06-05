@@ -26,11 +26,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 const api_1 = require("./api");
+const constants_1 = require("./constants");
 const server = api_1.app.listen(8080, () => {
     console.log(`Listening on the url *:8080`);
 });
 function activate(context) {
-    context.subscriptions.push(vscode.commands.registerCommand("spotify-controller.helloWorld", () => {
+    context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.playPause`, () => {
+        vscode.window.showInformationMessage("The music was paused/played");
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.helloWorld`, () => {
         vscode.window.showInformationMessage("Hello world from the vscode spotify controller");
     }));
 }
