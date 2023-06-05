@@ -1,6 +1,12 @@
 import * as vscode from "vscode";
 import { app } from "./api";
-import { CLIENT_ID, CLIENT_SECRET, PORT, appId } from "./constants";
+import {
+    BACKEND_URI,
+    CLIENT_ID,
+    CLIENT_SECRET,
+    PORT,
+    appId,
+} from "./constants";
 import {
     getAuthToken,
     protectedCommand,
@@ -26,6 +32,13 @@ export async function activate(context: vscode.ExtensionContext) {
 
     console.log(CLIENT_ID);
     console.log(CLIENT_SECRET);
+
+    registerCommand("login", false, () => {
+        vscode.window.showInformationMessage(
+            "Opening the login url. Please Authenticate."
+        );
+        vscode.env.openExternal(vscode.Uri.parse(`${BACKEND_URI}/auth/login`));
+    });
 
     registerCommand("playPause", true, () => {
         vscode.window.showInformationMessage("The song was played/paused.");

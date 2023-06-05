@@ -1,5 +1,6 @@
 import express from "express";
 import { spotifyApi } from "../services";
+import { setAuthToken, setRefreshToken } from "../../utils";
 
 export const authRouter = express.Router();
 
@@ -44,9 +45,12 @@ authRouter.get("/callback", async (req, res, next) => {
         spotifyApi.setAccessToken(data.body.access_token);
         spotifyApi.setRefreshToken(data.body.refresh_token);
 
-        return res.status(200).json({
-            data,
-        });
+        await setAuthToken(data.body.access_token);
+        await setRefreshToken(data.body.refresh_token);
+
+        return res.send(
+            "You were authenticated successfully! You can close this window now."
+        );
     } catch (e) {
         next(e);
     }

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const services_1 = require("../services");
+const utils_1 = require("../../utils");
 exports.authRouter = express_1.default.Router();
 exports.authRouter.get("/", async (req, res, next) => {
     try {
@@ -39,9 +40,9 @@ exports.authRouter.get("/callback", async (req, res, next) => {
         const data = await services_1.spotifyApi.authorizationCodeGrant(code);
         services_1.spotifyApi.setAccessToken(data.body.access_token);
         services_1.spotifyApi.setRefreshToken(data.body.refresh_token);
-        return res.status(200).json({
-            data,
-        });
+        await (0, utils_1.setAuthToken)(data.body.access_token);
+        await (0, utils_1.setRefreshToken)(data.body.refresh_token);
+        return res.send("You were authenticated successfully! You can close this window now.");
     }
     catch (e) {
         next(e);

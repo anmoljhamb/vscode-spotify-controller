@@ -44,6 +44,10 @@ async function activate(context) {
     }
     console.log(constants_1.CLIENT_ID);
     console.log(constants_1.CLIENT_SECRET);
+    registerCommand("login", false, () => {
+        vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
+        vscode.env.openExternal(vscode.Uri.parse(`${constants_1.BACKEND_URI}/auth/login`));
+    });
     registerCommand("playPause", true, () => {
         vscode.window.showInformationMessage("The song was played/paused.");
     });

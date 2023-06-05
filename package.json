@@ -16,6 +16,11 @@
     "contributes": {
         "commands": [
             {
+                "command": "spotify-controller.login",
+                "category": "SpotifyController",
+                "title": "Login"
+            },
+            {
                 "command": "spotify-controller.playPause",
                 "category": "SpotifyController",
                 "title": "Play Pause"
