@@ -56,30 +56,8 @@ async function activate(context) {
         utils_1.spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
-    registerCommand("nextSong", true, async () => {
-        try {
-            const resp = await utils_1.spotifyApi.skipToNext();
-            (0, utils_1.handleResp)(resp);
-        }
-        catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showErrorMessage(e.message);
-            }
-            console.log(e);
-        }
-    });
-    registerCommand("prevSong", true, async () => {
-        try {
-            const resp = await utils_1.spotifyApi.skipToPrevious();
-            (0, utils_1.handleResp)(resp);
-        }
-        catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showErrorMessage(e.message);
-            }
-            console.log(e);
-        }
-    });
+    registerSpotifyCommand("prevSong", "The song was skipped to previous.");
+    registerSpotifyCommand("nextSong", "The song was skipped to next.");
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
@@ -106,6 +84,27 @@ async function activate(context) {
     });
     function registerCommand(commandId, authRequired, func) {
         context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, authRequired ? (0, utils_1.protectedCommand)(func) : func));
+    }
+    function registerSpotifyCommand(commandId, sucessMsg) {
+        registerCommand(commandId, true, async () => {
+            try {
+                await handleCommand(commandId);
+                vscode.window.showInformationMessage(sucessMsg);
+            }
+            catch (e) {
+                if (e instanceof Error)
+                    vscode.window.showErrorMessage(e.message);
+                console.log(e);
+            }
+        });
+    }
+    async function handleCommand(commandId) {
+        switch (commandId) {
+            case "nextSong":
+                return await utils_1.spotifyApi.skipToNext();
+            case "prevSong":
+                return await utils_1.spotifyApi.skipToPrevious();
+        }
     }
 }
 exports.activate = activate;

@@ -63,29 +63,8 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
-    registerCommand("nextSong", true, async () => {
-        try {
-            const resp = await spotifyApi.skipToNext();
-            handleResp(resp);
-        } catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showErrorMessage(e.message);
-            }
-            console.log(e);
-        }
-    });
-
-    registerCommand("prevSong", true, async () => {
-        try {
-            const resp = await spotifyApi.skipToPrevious();
-            handleResp(resp);
-        } catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showErrorMessage(e.message);
-            }
-            console.log(e);
-        }
-    });
+    registerSpotifyCommand("prevSong", "The song was skipped to previous.");
+    registerSpotifyCommand("nextSong", "The song was skipped to next.");
 
     registerCommand("playPause", true, async () => {
         try {
@@ -124,6 +103,28 @@ export async function activate(context: vscode.ExtensionContext) {
                 authRequired ? protectedCommand(func) : func
             )
         );
+    }
+
+    function registerSpotifyCommand(commandId: string, sucessMsg: string) {
+        registerCommand(commandId, true, async () => {
+            try {
+                await handleCommand(commandId);
+                vscode.window.showInformationMessage(sucessMsg);
+            } catch (e) {
+                if (e instanceof Error)
+                    vscode.window.showErrorMessage(e.message);
+                console.log(e);
+            }
+        });
+    }
+
+    async function handleCommand(commandId: string) {
+        switch (commandId) {
+            case "nextSong":
+                return await spotifyApi.skipToNext();
+            case "prevSong":
+                return await spotifyApi.skipToPrevious();
+        }
     }
 }
 
