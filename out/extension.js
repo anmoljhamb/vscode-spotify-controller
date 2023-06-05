@@ -84,7 +84,7 @@ async function activate(context) {
             (0, utils_1.handleError)(e);
         }
     });
-    const playTrackTemplate = ({ title, handlerId, }) => {
+    const playTrackTemplate = ({ title, handlerId, confirm, }) => {
         return async () => {
             try {
                 const resp = await vscode.window.showInputBox({
@@ -103,18 +103,25 @@ async function activate(context) {
                     return `${item.name} By ${artists.join(", ")}`;
                 };
                 const songs = tracks.items.slice(0, 5);
-                const choice = await vscode.window.showQuickPick(songs.map((song) => getName(song)), {
-                    title,
-                    placeHolder: "Pick which song you'd like to play",
-                });
-                if (!choice)
-                    return;
-                const chosenTrack = songs
-                    .filter((song) => getName(song) === choice)
-                    .at(0);
+                let chosenTrackUri;
+                if (confirm) {
+                    const choice = await vscode.window.showQuickPick(songs.map((song) => getName(song)), {
+                        title,
+                        placeHolder: "Pick which song you'd like to play",
+                    });
+                    if (!choice)
+                        return;
+                    const chosenTrack = songs
+                        .filter((song) => getName(song) === choice)
+                        .at(0);
+                    chosenTrackUri = chosenTrack.uri;
+                }
+                else {
+                    chosenTrackUri = songs.at(0)?.uri;
+                }
                 await handleCommand({
                     handlerId,
-                    payload: chosenTrack.uri,
+                    payload: chosenTrackUri,
                 });
             }
             catch (e) {
@@ -123,8 +130,14 @@ async function activate(context) {
         };
     };
     registerCommand("playTrack", true, playTrackTemplate({
+        confirm: true,
         title: "Play track",
         handlerId: "playTrack",
+    }));
+    registerCommand("playTrackWithoutConfirmation", true, playTrackTemplate({
+        title: "Play Track Without Confirmation",
+        handlerId: "playTrack",
+        confirm: false,
     }));
     registerCommand("seek", true, async () => {
         try {
