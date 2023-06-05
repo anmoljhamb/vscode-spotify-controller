@@ -79,6 +79,7 @@ async function activate(context) {
                 handlerId: "setVolume",
                 payload: resp,
             });
+            (0, utils_1.showInformationMessage)("Volume set successfully!");
         }
         catch (e) {
             (0, utils_1.handleError)(e);
@@ -123,6 +124,7 @@ async function activate(context) {
                     handlerId,
                     payload: chosenTrackUri,
                 });
+                (0, utils_1.showInformationMessage)("The action was completed successfully!");
             }
             catch (e) {
                 (0, utils_1.handleError)(e);
@@ -179,6 +181,7 @@ async function activate(context) {
                 handlerId: "seek",
                 payload: Number.parseInt(seekTo) * 1000,
             });
+            (0, utils_1.showInformationMessage)("The song was seeked to the given position successfully!");
         }
         catch (e) {
             (0, utils_1.handleError)(e);
@@ -209,6 +212,7 @@ async function activate(context) {
                 handlerId: "switchDevice",
                 payload: [device.id],
             });
+            (0, utils_1.showInformationMessage)("The device was switched successfully!");
         }
         catch (e) {
             (0, utils_1.handleError)(e);
@@ -232,7 +236,7 @@ async function activate(context) {
                 if (!handlerId)
                     handlerId = commandId;
                 await handleCommand({ handlerId, payload });
-                vscode.window.showInformationMessage(successMsg);
+                (0, utils_1.showInformationMessage)(successMsg);
             }
             catch (e) {
                 (0, utils_1.handleError)(e);

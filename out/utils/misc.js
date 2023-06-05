@@ -23,12 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.handleError = void 0;
+exports.showInformationMessage = exports.handleError = void 0;
 const vscode = __importStar(require("vscode"));
+const constants_1 = require("../constants");
 const handleError = (e) => {
     if (e instanceof Error)
         vscode.window.showErrorMessage(e.message);
     console.log(e);
 };
 exports.handleError = handleError;
+const showInformationMessage = (message) => {
+    if (constants_1.SHOW_ALERTS) {
+        vscode.window.showInformationMessage(message);
+    }
+};
+exports.showInformationMessage = showInformationMessage;
 //# sourceMappingURL=misc.js.map

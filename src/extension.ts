@@ -19,6 +19,7 @@ import {
     setAccessToken,
     setRefreshInterval,
     setRefreshToken,
+    showInformationMessage,
     spotifyApi,
     updateGlobalState,
     updateIsLoggedIn,
@@ -87,6 +88,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 handlerId: "setVolume",
                 payload: resp,
             });
+            showInformationMessage("Volume set successfully!");
         } catch (e) {
             handleError(e);
         }
@@ -139,6 +141,9 @@ export async function activate(context: vscode.ExtensionContext) {
                     handlerId,
                     payload: chosenTrackUri,
                 });
+                showInformationMessage(
+                    "The action was completed successfully!"
+                );
             } catch (e) {
                 handleError(e);
             }
@@ -215,6 +220,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 handlerId: "seek",
                 payload: Number.parseInt(seekTo) * 1000,
             });
+            showInformationMessage(
+                "The song was seeked to the given position successfully!"
+            );
         } catch (e) {
             handleError(e);
         }
@@ -249,6 +257,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 handlerId: "switchDevice",
                 payload: [device.id as string],
             });
+            showInformationMessage("The device was switched successfully!");
         } catch (e) {
             handleError(e);
         }
@@ -288,7 +297,7 @@ export async function activate(context: vscode.ExtensionContext) {
             try {
                 if (!handlerId) handlerId = commandId;
                 await handleCommand({ handlerId, payload });
-                vscode.window.showInformationMessage(successMsg);
+                showInformationMessage(successMsg);
             } catch (e) {
                 handleError(e);
             }

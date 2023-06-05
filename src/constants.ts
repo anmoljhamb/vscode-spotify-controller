@@ -11,6 +11,9 @@ export const CLIENT_ID: string = vscode.workspace
 export const CLIENT_SECRET: string = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerClientSecret") as string;
+export const SHOW_ALERTS: boolean = vscode.workspace
+    .getConfiguration()
+    .get("spotifyControllerShowInformationAlerts") as boolean;
 export const REDIRECT_URI = `${BACKEND_URI}/auth/callback`;
 
 export const commands: RegisterSpotifyCommand[] = [

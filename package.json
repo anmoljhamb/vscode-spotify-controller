@@ -129,6 +129,11 @@
                         "description": "Enter your own client secret from the developer spotify console",
                         "type": "string",
                         "default": "clientSecret"
+                    },
+                    "spotifyControllerShowInformationAlerts": {
+                        "description": "Show information alerts when a given action is successful.",
+                        "type": "boolean",
+                        "default": true
                     }
                 }
             }
