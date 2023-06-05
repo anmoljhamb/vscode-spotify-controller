@@ -56,16 +56,41 @@ async function activate(context) {
         utils_1.spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
+    registerCommand("nextSong", true, async () => {
+        try {
+            const resp = await utils_1.spotifyApi.skipToNext();
+            (0, utils_1.handleResp)(resp);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showErrorMessage(e.message);
+            }
+            console.log(e);
+        }
+    });
+    registerCommand("prevSong", true, async () => {
+        try {
+            const resp = await utils_1.spotifyApi.skipToPrevious();
+            (0, utils_1.handleResp)(resp);
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showErrorMessage(e.message);
+            }
+            console.log(e);
+        }
+    });
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
             let message;
+            let resp;
             if (isPlaying) {
-                utils_1.spotifyApi.pause();
+                resp = await utils_1.spotifyApi.pause();
                 message = "The song was paused";
             }
             else {
-                utils_1.spotifyApi.play();
+                resp = await utils_1.spotifyApi.play();
                 message = "The song was resumed";
             }
             vscode.window.showInformationMessage(message);

@@ -10,6 +10,7 @@ import {
     getAccessToken,
     getPlayingStatus,
     getRefreshToken,
+    handleResp,
     isLoggedIn,
     protectedCommand,
     refreshToken,
@@ -62,15 +63,40 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
+    registerCommand("nextSong", true, async () => {
+        try {
+            const resp = await spotifyApi.skipToNext();
+            handleResp(resp);
+        } catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showErrorMessage(e.message);
+            }
+            console.log(e);
+        }
+    });
+
+    registerCommand("prevSong", true, async () => {
+        try {
+            const resp = await spotifyApi.skipToPrevious();
+            handleResp(resp);
+        } catch (e) {
+            if (e instanceof Error) {
+                vscode.window.showErrorMessage(e.message);
+            }
+            console.log(e);
+        }
+    });
+
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await getPlayingStatus();
             let message: string;
+            let resp: Response<void>;
             if (isPlaying) {
-                spotifyApi.pause();
+                resp = await spotifyApi.pause();
                 message = "The song was paused";
             } else {
-                spotifyApi.play();
+                resp = await spotifyApi.play();
                 message = "The song was resumed";
             }
             vscode.window.showInformationMessage(message);

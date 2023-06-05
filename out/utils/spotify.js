@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPlayingStatus = exports.spotifyApi = void 0;
+exports.handleResp = exports.getPlayingStatus = exports.spotifyApi = void 0;
 const spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
 const constants_1 = require("../constants");
 exports.spotifyApi = new spotify_web_api_node_1.default({
@@ -13,9 +13,13 @@ exports.spotifyApi = new spotify_web_api_node_1.default({
 });
 const getPlayingStatus = async () => {
     const resp = await exports.spotifyApi.getMyCurrentPlaybackState();
-    if (resp.statusCode === 204)
-        throw new Error("No spotify instance found");
+    (0, exports.handleResp)(resp);
     return resp.body.is_playing;
 };
 exports.getPlayingStatus = getPlayingStatus;
+const handleResp = (resp) => {
+    if (resp.statusCode === 204)
+        throw new Error("No Spotify Instance Found");
+};
+exports.handleResp = handleResp;
 //# sourceMappingURL=spotify.js.map

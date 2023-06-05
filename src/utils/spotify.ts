@@ -9,6 +9,10 @@ export const spotifyApi = new SpotifyWebApi({
 
 export const getPlayingStatus = async () => {
     const resp = await spotifyApi.getMyCurrentPlaybackState();
-    if (resp.statusCode === 204) throw new Error("No spotify instance found");
+    handleResp(resp);
     return resp.body.is_playing;
+};
+
+export const handleResp = (resp: Response<any>) => {
+    if (resp.statusCode === 204) throw new Error("No Spotify Instance Found");
 };

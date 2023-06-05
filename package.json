@@ -31,6 +31,16 @@
                 "title": "Play Pause"
             },
             {
+                "command": "spotify-controller.nextSong",
+                "category": "SpotifyController",
+                "title": "Next Song"
+            },
+            {
+                "command": "spotify-controller.prevSong",
+                "category": "SpotifyController",
+                "title": "Previous Song"
+            },
+            {
                 "command": "spotify-controller.helloWorld",
                 "category": "SpotifyController",
                 "title": "Hello World"
