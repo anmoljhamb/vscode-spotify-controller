@@ -80,10 +80,7 @@ async function activate(context) {
             });
         }
         catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showInformationMessage(e.message);
-            }
-            console.log(e);
+            (0, utils_1.handleError)(e);
         }
     });
     registerCommand("playPause", true, async () => {
@@ -92,9 +89,7 @@ async function activate(context) {
             vscode.commands.executeCommand(`${constants_1.appId}.${isPlaying ? "pause" : "play"}`);
         }
         catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showErrorMessage(e.message);
-            }
+            (0, utils_1.handleError)(e);
         }
     });
     function registerCommand(commandId, authRequired, func) {
@@ -109,9 +104,7 @@ async function activate(context) {
                 vscode.window.showInformationMessage(successMsg);
             }
             catch (e) {
-                if (e instanceof Error)
-                    vscode.window.showErrorMessage(e.message);
-                console.log(e);
+                (0, utils_1.handleError)(e);
             }
         });
     }

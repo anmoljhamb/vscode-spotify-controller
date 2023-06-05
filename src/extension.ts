@@ -11,6 +11,7 @@ import {
     getAccessToken,
     getPlayingStatus,
     getRefreshToken,
+    handleError,
     handleResp,
     isLoggedIn,
     protectedCommand,
@@ -86,10 +87,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 payload: resp,
             });
         } catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showInformationMessage(e.message);
-            }
-            console.log(e);
+            handleError(e);
         }
     });
 
@@ -100,9 +98,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 `${appId}.${isPlaying ? "pause" : "play"}`
             );
         } catch (e) {
-            if (e instanceof Error) {
-                vscode.window.showErrorMessage(e.message);
-            }
+            handleError(e);
         }
     });
 
@@ -131,9 +127,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 await handleCommand({ handlerId, payload });
                 vscode.window.showInformationMessage(successMsg);
             } catch (e) {
-                if (e instanceof Error)
-                    vscode.window.showErrorMessage(e.message);
-                console.log(e);
+                handleError(e);
             }
         });
     }
