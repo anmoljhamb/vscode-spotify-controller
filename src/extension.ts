@@ -1,13 +1,29 @@
 import * as vscode from "vscode";
 import { app } from "./api";
 import { appId } from "./constants";
-import { protectedCommand } from "./utils";
+import {
+    getAuthToken,
+    protectedCommand,
+    setAuthToken,
+    updateGlobalState,
+} from "./utils";
 
 const server = app.listen(8080, () => {
     console.log(`Listening on the url *:8080`);
 });
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+    updateGlobalState(context.globalState);
+
+    const authKey = await getAuthToken();
+    if (!authKey) {
+        console.log("setting authKey");
+        await setAuthToken("thisismysupersecretauthkey");
+        console.log(await getAuthToken());
+    } else {
+        console.log(authKey);
+    }
+
     registerCommand("playPause", true, () => {
         vscode.window.showInformationMessage("The song was played/paused.");
     });

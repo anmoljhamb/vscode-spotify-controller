@@ -31,7 +31,17 @@ const utils_1 = require("./utils");
 const server = api_1.app.listen(8080, () => {
     console.log(`Listening on the url *:8080`);
 });
-function activate(context) {
+async function activate(context) {
+    (0, utils_1.updateGlobalState)(context.globalState);
+    const authKey = await (0, utils_1.getAuthToken)();
+    if (!authKey) {
+        console.log("setting authKey");
+        await (0, utils_1.setAuthToken)("thisismysupersecretauthkey");
+        console.log(await (0, utils_1.getAuthToken)());
+    }
+    else {
+        console.log(authKey);
+    }
     registerCommand("playPause", true, () => {
         vscode.window.showInformationMessage("The song was played/paused.");
     });
