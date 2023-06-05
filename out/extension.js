@@ -56,12 +56,30 @@ async function activate(context) {
         utils_1.spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
-    registerSpotifyCommand("prevSong", "The song was skipped to previous.");
-    registerSpotifyCommand("nextSong", "The song was skipped to next.");
-    registerSpotifyCommand("pause", "The song was paused successfully.");
-    registerSpotifyCommand("play", "The song was resumed successfully.");
-    registerSpotifyCommand("shuffleOff", "The shuffle was turned off successfully!");
-    registerSpotifyCommand("shuffleOn", "The shuffle was turned on successfully!");
+    registerSpotifyCommand({
+        commandId: "nextSong",
+        successMsg: "The song was skipped to next successfully!",
+    });
+    registerSpotifyCommand({
+        commandId: "prevSong",
+        successMsg: "The song was skipped to previous successfully!",
+    });
+    registerSpotifyCommand({
+        commandId: "pause",
+        successMsg: "The song was paused successfully.",
+    });
+    registerSpotifyCommand({
+        commandId: "play",
+        successMsg: "The song was resumed successfully.",
+    });
+    registerSpotifyCommand({
+        commandId: "shuffleOff",
+        successMsg: "The shuffle was turned off successfully!",
+    });
+    registerSpotifyCommand({
+        commandId: "shuffleOn",
+        successMsg: "The shuffle was turned on successfully!",
+    });
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
@@ -76,11 +94,11 @@ async function activate(context) {
     function registerCommand(commandId, authRequired, func) {
         context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, authRequired ? (0, utils_1.protectedCommand)(func) : func));
     }
-    function registerSpotifyCommand(commandId, sucessMsg) {
+    function registerSpotifyCommand({ commandId, successMsg, }) {
         registerCommand(commandId, true, async () => {
             try {
                 await handleCommand(commandId);
-                vscode.window.showInformationMessage(sucessMsg);
+                vscode.window.showInformationMessage(successMsg);
             }
             catch (e) {
                 if (e instanceof Error)

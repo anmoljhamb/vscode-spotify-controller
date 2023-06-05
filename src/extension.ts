@@ -63,18 +63,30 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
-    registerSpotifyCommand("prevSong", "The song was skipped to previous.");
-    registerSpotifyCommand("nextSong", "The song was skipped to next.");
-    registerSpotifyCommand("pause", "The song was paused successfully.");
-    registerSpotifyCommand("play", "The song was resumed successfully.");
-    registerSpotifyCommand(
-        "shuffleOff",
-        "The shuffle was turned off successfully!"
-    );
-    registerSpotifyCommand(
-        "shuffleOn",
-        "The shuffle was turned on successfully!"
-    );
+    registerSpotifyCommand({
+        commandId: "nextSong",
+        successMsg: "The song was skipped to next successfully!",
+    });
+    registerSpotifyCommand({
+        commandId: "prevSong",
+        successMsg: "The song was skipped to previous successfully!",
+    });
+    registerSpotifyCommand({
+        commandId: "pause",
+        successMsg: "The song was paused successfully.",
+    });
+    registerSpotifyCommand({
+        commandId: "play",
+        successMsg: "The song was resumed successfully.",
+    });
+    registerSpotifyCommand({
+        commandId: "shuffleOff",
+        successMsg: "The shuffle was turned off successfully!",
+    });
+    registerSpotifyCommand({
+        commandId: "shuffleOn",
+        successMsg: "The shuffle was turned on successfully!",
+    });
 
     registerCommand("playPause", true, async () => {
         try {
@@ -102,11 +114,17 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     }
 
-    function registerSpotifyCommand(commandId: string, sucessMsg: string) {
+    function registerSpotifyCommand({
+        commandId,
+        successMsg,
+    }: {
+        commandId: string;
+        successMsg: string;
+    }) {
         registerCommand(commandId, true, async () => {
             try {
                 await handleCommand(commandId);
-                vscode.window.showInformationMessage(sucessMsg);
+                vscode.window.showInformationMessage(successMsg);
             } catch (e) {
                 if (e instanceof Error)
                     vscode.window.showErrorMessage(e.message);
