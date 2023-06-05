@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { app } from "./api";
 import { appId } from "./constants";
+import { protectedCommand } from "./utils";
 
 const server = app.listen(8080, () => {
     console.log(`Listening on the url *:8080`);
@@ -8,9 +9,14 @@ const server = app.listen(8080, () => {
 
 export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-        vscode.commands.registerCommand(`${appId}.playPause`, () => {
-            vscode.window.showInformationMessage("The music was paused/played");
-        })
+        vscode.commands.registerCommand(
+            `${appId}.playPause`,
+            protectedCommand(() => {
+                vscode.window.showInformationMessage(
+                    "The music was played/paused."
+                );
+            })
+        )
     );
     context.subscriptions.push(
         vscode.commands.registerCommand(`${appId}.helloWorld`, () => {
