@@ -40,7 +40,7 @@ exports.authRouter.get("/callback", async (req, res, next) => {
         const data = await services_1.spotifyApi.authorizationCodeGrant(code);
         services_1.spotifyApi.setAccessToken(data.body.access_token);
         services_1.spotifyApi.setRefreshToken(data.body.refresh_token);
-        await (0, utils_1.setAuthToken)(data.body.access_token);
+        await (0, utils_1.setAccessToken)(data.body.access_token);
         await (0, utils_1.setRefreshToken)(data.body.refresh_token);
         return res.send("You were authenticated successfully! You can close this window now.");
     }

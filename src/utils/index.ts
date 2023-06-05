@@ -1,2 +1,2 @@
-export * from "./TokenManager";
 export * from "./auth";
+export * from "./tokenManager";

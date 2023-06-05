@@ -33,11 +33,11 @@ const server = api_1.app.listen(constants_1.PORT, () => {
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
-    const authKey = await (0, utils_1.getAuthToken)();
+    const authKey = await (0, utils_1.getAccessToken)();
     if (!authKey) {
         console.log("setting authKey");
-        await (0, utils_1.setAuthToken)("thisismysupersecretauthkey");
-        console.log(await (0, utils_1.getAuthToken)());
+        await (0, utils_1.setAccessToken)("thisismysupersecretauthkey");
+        console.log(await (0, utils_1.getAccessToken)());
     }
     else {
         console.log(authKey);

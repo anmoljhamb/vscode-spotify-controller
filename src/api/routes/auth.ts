@@ -1,6 +1,6 @@
 import express from "express";
 import { spotifyApi } from "../services";
-import { setAuthToken, setRefreshToken } from "../../utils";
+import { setAccessToken, setRefreshToken } from "../../utils";
 
 export const authRouter = express.Router();
 
@@ -45,7 +45,7 @@ authRouter.get("/callback", async (req, res, next) => {
         spotifyApi.setAccessToken(data.body.access_token);
         spotifyApi.setRefreshToken(data.body.refresh_token);
 
-        await setAuthToken(data.body.access_token);
+        await setAccessToken(data.body.access_token);
         await setRefreshToken(data.body.refresh_token);
 
         return res.send(

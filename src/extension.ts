@@ -8,9 +8,9 @@ import {
     appId,
 } from "./constants";
 import {
-    getAuthToken,
+    getAccessToken,
     protectedCommand,
-    setAuthToken,
+    setAccessToken,
     updateGlobalState,
 } from "./utils";
 
@@ -21,11 +21,11 @@ const server = app.listen(PORT, () => {
 export async function activate(context: vscode.ExtensionContext) {
     updateGlobalState(context.globalState);
 
-    const authKey = await getAuthToken();
+    const authKey = await getAccessToken();
     if (!authKey) {
         console.log("setting authKey");
-        await setAuthToken("thisismysupersecretauthkey");
-        console.log(await getAuthToken());
+        await setAccessToken("thisismysupersecretauthkey");
+        console.log(await getAccessToken());
     } else {
         console.log(authKey);
     }
