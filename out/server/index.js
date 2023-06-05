@@ -43,6 +43,8 @@ exports.app.get("/auth/callback", async (req, res, next) => {
         utils_1.spotifyApi.setRefreshToken(data.body.refresh_token);
         await (0, utils_1.setAccessToken)(data.body.access_token);
         await (0, utils_1.setRefreshToken)(data.body.refresh_token);
+        (0, utils_1.clearRefreshInterval)();
+        (0, utils_1.setRefreshInterval)();
         return res.send("You were authenticated successfully! You can close this window now.");
     }
     catch (e) {

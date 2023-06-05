@@ -5,7 +5,13 @@ import morgan from "morgan";
 import cors from "cors";
 import createHttpError from "http-errors";
 import { BACKEND_URI } from "../constants";
-import { setAccessToken, setRefreshToken, spotifyApi } from "../utils";
+import {
+    clearRefreshInterval,
+    setAccessToken,
+    setRefreshInterval,
+    setRefreshToken,
+    spotifyApi,
+} from "../utils";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
@@ -49,6 +55,9 @@ app.get("/auth/callback", async (req, res, next) => {
 
         await setAccessToken(data.body.access_token);
         await setRefreshToken(data.body.refresh_token);
+
+        clearRefreshInterval();
+        setRefreshInterval();
 
         return res.send(
             "You were authenticated successfully! You can close this window now."

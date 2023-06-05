@@ -14,6 +14,7 @@ import {
     protectedCommand,
     refreshToken,
     setAccessToken,
+    setRefreshInterval,
     spotifyApi,
     updateGlobalState,
     updateIsLoggedIn,
@@ -35,6 +36,7 @@ export async function activate(context: vscode.ExtensionContext) {
     try {
         const user = await spotifyApi.getMe();
         updateIsLoggedIn(true);
+        setRefreshInterval();
     } catch (e) {
         vscode.window.showWarningMessage(
             "Spotify Controller Not Logged In. Please Login"

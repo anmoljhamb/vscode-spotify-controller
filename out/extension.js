@@ -39,6 +39,7 @@ async function activate(context) {
     try {
         const user = await utils_1.spotifyApi.getMe();
         (0, utils_1.updateIsLoggedIn)(true);
+        (0, utils_1.setRefreshInterval)();
     }
     catch (e) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");

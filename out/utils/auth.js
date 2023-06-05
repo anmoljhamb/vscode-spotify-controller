@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.intervalTime = exports.refreshToken = exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
+exports.clearRefreshInterval = exports.setRefreshInterval = exports.refreshInterval = exports.intervalTime = exports.refreshToken = exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
 const vscode = __importStar(require("vscode"));
 const tokenManager_1 = require("./tokenManager");
 const spotify_1 = require("./spotify");
@@ -56,4 +56,13 @@ const refreshToken = async () => {
 };
 exports.refreshToken = refreshToken;
 exports.intervalTime = (3600 - 60) * 1000;
+const setRefreshInterval = () => {
+    exports.refreshInterval = setInterval(exports.refreshToken, exports.intervalTime);
+};
+exports.setRefreshInterval = setRefreshInterval;
+const clearRefreshInterval = () => {
+    if (exports.refreshInterval)
+        clearInterval(exports.refreshInterval);
+};
+exports.clearRefreshInterval = clearRefreshInterval;
 //# sourceMappingURL=auth.js.map

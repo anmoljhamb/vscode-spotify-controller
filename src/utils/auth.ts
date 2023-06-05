@@ -35,3 +35,13 @@ export const refreshToken = async () => {
 };
 
 export const intervalTime = (3600 - 60) * 1000;
+
+export let refreshInterval: NodeJS.Timer;
+
+export const setRefreshInterval = () => {
+    refreshInterval = setInterval(refreshToken, intervalTime);
+};
+
+export const clearRefreshInterval = () => {
+    if (refreshInterval) clearInterval(refreshInterval);
+};
