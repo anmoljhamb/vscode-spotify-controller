@@ -91,6 +91,24 @@ export async function activate(context: vscode.ExtensionContext) {
         handlerId: "shuffle",
         payload: true,
     });
+    registerSpotifyCommand({
+        commandId: "setRepeatContext",
+        successMsg: "The repeat was set to the current context",
+        handlerId: "repeat",
+        payload: "context",
+    });
+    registerSpotifyCommand({
+        commandId: "setRepeatTrack",
+        successMsg: "The repeat was set to the current track",
+        handlerId: "repeat",
+        payload: "track",
+    });
+    registerSpotifyCommand({
+        commandId: "setRepeatOff",
+        successMsg: "The repeat was turned off",
+        handlerId: "repeat",
+        payload: "off",
+    });
 
     registerCommand("playPause", true, async () => {
         try {
@@ -160,6 +178,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 return await spotifyApi.play();
             case "shuffle":
                 return await spotifyApi.setShuffle(payload);
+            case "repeat":
+                return await spotifyApi.setRepeat(payload);
         }
     }
 }

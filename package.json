@@ -51,6 +51,21 @@
                 "title": "Shuffle On"
             },
             {
+                "command": "spotify-controller.setRepeatOff",
+                "category": "SpotifyController",
+                "title": "Set Repeat to Off"
+            },
+            {
+                "command": "spotify-controller.setRepeatContext",
+                "category": "SpotifyController",
+                "title": "Set Repeat To current context"
+            },
+            {
+                "command": "spotify-controller.setRepeatTrack",
+                "category": "SpotifyController",
+                "title": "Set Repeat To Track"
+            },
+            {
                 "command": "spotify-controller.nextSong",
                 "category": "SpotifyController",
                 "title": "Next Song"

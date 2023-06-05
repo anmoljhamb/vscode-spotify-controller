@@ -84,6 +84,24 @@ async function activate(context) {
         handlerId: "shuffle",
         payload: true,
     });
+    registerSpotifyCommand({
+        commandId: "setRepeatContext",
+        successMsg: "The repeat was set to the current context",
+        handlerId: "repeat",
+        payload: "context",
+    });
+    registerSpotifyCommand({
+        commandId: "setRepeatTrack",
+        successMsg: "The repeat was set to the current track",
+        handlerId: "repeat",
+        payload: "track",
+    });
+    registerSpotifyCommand({
+        commandId: "setRepeatOff",
+        successMsg: "The repeat was turned off",
+        handlerId: "repeat",
+        payload: "off",
+    });
     registerCommand("playPause", true, async () => {
         try {
             const isPlaying = await (0, utils_1.getPlayingStatus)();
@@ -125,6 +143,8 @@ async function activate(context) {
                 return await utils_1.spotifyApi.play();
             case "shuffle":
                 return await utils_1.spotifyApi.setShuffle(payload);
+            case "repeat":
+                return await utils_1.spotifyApi.setRepeat(payload);
         }
     }
 }
