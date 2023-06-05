@@ -5,14 +5,14 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import createHttpError from "http-errors";
-import { BACKEND_URI } from "../constants";
+import { BACKEND_URI } from "./constants";
 import {
     clearRefreshInterval,
     setAccessToken,
     setRefreshInterval,
     setRefreshToken,
     spotifyApi,
-} from "../utils";
+} from "./utils";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
