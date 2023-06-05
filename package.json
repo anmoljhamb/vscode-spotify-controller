@@ -76,6 +76,16 @@
                 "title": "Seek"
             },
             {
+                "command": "spotify-controller.playTrack",
+                "category": "SpotifyController",
+                "title": "Play Track"
+            },
+            {
+                "command": "spotify-controller.playTrackInContext",
+                "category": "SpotifyController",
+                "title": "Play Track In Context"
+            },
+            {
                 "command": "spotify-controller.switchDevice",
                 "category": "SpotifyController",
                 "title": "Switch Device"

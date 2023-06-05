@@ -92,6 +92,42 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    registerCommand("playTrackInContext", true, async () => {
+        try {
+            const resp = await vscode.window.showInputBox({
+                title: "Play Track in context",
+                prompt: "Enter the song you want to play.",
+            });
+            if (!resp) return;
+            const tracks = (await spotifyApi.searchTracks(resp)).body.tracks;
+            if (tracks === undefined || tracks.items.length === 0)
+                throw new Error("No results found");
+            const _temp = tracks.items[0];
+            const getName = (item: typeof _temp) => {
+                const artists = item.artists.map((artist) => artist.name);
+                return `${item.name} By ${artists.join(", ")}`;
+            };
+            const songs = tracks.items.slice(0, 5);
+            const choice = await vscode.window.showQuickPick(
+                songs.map((song) => getName(song)),
+                {
+                    title: "Play Track in Context",
+                    placeHolder: "Pick which song you'd like to play",
+                }
+            );
+            if (!choice) return;
+            const chosenTrack = songs
+                .filter((song) => getName(song) === choice)
+                .at(0)!;
+            await handleCommand({
+                handlerId: "playTrackInContext",
+                payload: chosenTrack.uri,
+            });
+        } catch (e) {
+            handleError(e);
+        }
+    });
+
     registerCommand("seek", true, async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
@@ -228,6 +264,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 return await spotifyApi.transferMyPlayback(payload);
             case "seek":
                 return await spotifyApi.seek(payload);
+            case "playTrackInContext":
+                await spotifyApi.addToQueue(payload);
+                return await spotifyApi.skipToNext();
             default:
                 vscode.window.showWarningMessage(
                     "The given command was not found."
