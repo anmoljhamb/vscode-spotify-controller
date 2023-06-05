@@ -32,12 +32,15 @@ const server = api_1.app.listen(8080, () => {
     console.log(`Listening on the url *:8080`);
 });
 function activate(context) {
-    context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.playPause`, (0, utils_1.protectedCommand)(() => {
-        vscode.window.showInformationMessage("The music was played/paused.");
-    })));
-    context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.helloWorld`, () => {
-        vscode.window.showInformationMessage("Hello world from the vscode spotify controller");
-    }));
+    registerCommand("playPause", true, () => {
+        vscode.window.showInformationMessage("The song was played/paused.");
+    });
+    registerCommand("helloWorld", false, () => {
+        vscode.window.showInformationMessage("Hello World from the spotify controller extension.");
+    });
+    function registerCommand(commandId, authRequired, func) {
+        context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, authRequired ? (0, utils_1.protectedCommand)(func) : func));
+    }
 }
 exports.activate = activate;
 function deactivate() {

@@ -8,23 +8,28 @@ const server = app.listen(8080, () => {
 });
 
 export function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(
-        vscode.commands.registerCommand(
-            `${appId}.playPause`,
-            protectedCommand(() => {
-                vscode.window.showInformationMessage(
-                    "The music was played/paused."
-                );
-            })
-        )
-    );
-    context.subscriptions.push(
-        vscode.commands.registerCommand(`${appId}.helloWorld`, () => {
-            vscode.window.showInformationMessage(
-                "Hello world from the vscode spotify controller"
-            );
-        })
-    );
+    registerCommand("playPause", true, () => {
+        vscode.window.showInformationMessage("The song was played/paused.");
+    });
+
+    registerCommand("helloWorld", false, () => {
+        vscode.window.showInformationMessage(
+            "Hello World from the spotify controller extension."
+        );
+    });
+
+    function registerCommand(
+        commandId: string,
+        authRequired: boolean,
+        func: () => void
+    ) {
+        context.subscriptions.push(
+            vscode.commands.registerCommand(
+                `${appId}.${commandId}`,
+                authRequired ? protectedCommand(func) : func
+            )
+        );
+    }
 }
 
 export function deactivate() {
