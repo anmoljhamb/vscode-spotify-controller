@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { app } from "./api";
 import {
     BACKEND_URI,
     CLIENT_ID,
@@ -13,6 +12,7 @@ import {
     setAccessToken,
     updateGlobalState,
 } from "./utils";
+import { app } from "./server";
 
 const server = app.listen(PORT, () => {
     console.log(`Listening on the url *:${PORT}`);

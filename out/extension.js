@@ -25,10 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
-const api_1 = require("./api");
 const constants_1 = require("./constants");
 const utils_1 = require("./utils");
-const server = api_1.app.listen(constants_1.PORT, () => {
+const server_1 = require("./server");
+const server = server_1.app.listen(constants_1.PORT, () => {
     console.log(`Listening on the url *:${constants_1.PORT}`);
 });
 async function activate(context) {

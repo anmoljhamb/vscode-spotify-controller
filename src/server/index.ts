@@ -4,9 +4,8 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import createHttpError from "http-errors";
-import { authRouter, controlRouter, statusRoutes } from "./routes";
-import { protectedRoute } from "./middlewares";
 import { BACKEND_URI } from "../constants";
+import { setAccessToken, setRefreshToken, spotifyApi } from "../utils";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
@@ -21,10 +20,43 @@ app.get("/", (req, res) => {
     res.status(200).json({ message: "Working" });
 });
 
-// Routes
-app.use("/auth", authRouter);
-app.use("/status", statusRoutes);
-app.use("/control", controlRouter);
+app.get("/auth/login", (req, res, next) => {
+    const scopes = [
+        "user-read-private",
+        "user-read-email",
+        "user-read-playback-state",
+        "user-read-currently-playing",
+        "user-modify-playback-state",
+        "app-remote-control",
+        "streaming",
+    ];
+
+    const authUrl = spotifyApi.createAuthorizeURL(
+        scopes,
+        "some-state-of-my-choice"
+    );
+
+    return res.redirect(authUrl);
+});
+
+app.get("/auth/callback", async (req, res, next) => {
+    const { code } = req.query;
+    try {
+        const data = await spotifyApi.authorizationCodeGrant(code as string);
+
+        spotifyApi.setAccessToken(data.body.access_token);
+        spotifyApi.setRefreshToken(data.body.refresh_token);
+
+        await setAccessToken(data.body.access_token);
+        await setRefreshToken(data.body.refresh_token);
+
+        return res.send(
+            "You were authenticated successfully! You can close this window now."
+        );
+    } catch (e) {
+        next(e);
+    }
+});
 
 app.use((req, res, next) => {
     return next(
