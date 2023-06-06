@@ -4,6 +4,7 @@ import { app } from "./server";
 import {
     authUrl,
     getAccessToken,
+    getLoggedIn,
     getPlayingStatus,
     handleError,
     isLoggedIn,
@@ -37,15 +38,15 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.showWarningMessage(
             "Spotify Controller Not Logged In. Please Login"
         );
-        updateIsLoggedIn(false);
         console.log("Error while gettingMe");
+        updateIsLoggedIn(false);
         console.error(e);
     }
 
     commands.forEach((command) => registerSpotifyCommand(command));
 
     registerCommand("login", false, () => {
-        if (isLoggedIn) {
+        if (getLoggedIn()) {
             vscode.window.showWarningMessage(
                 "You are already logged in. Please log out to log in again."
             );
@@ -58,13 +59,14 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     registerCommand("logout", false, async () => {
-        if (!isLoggedIn) {
+        if (!getLoggedIn()) {
             vscode.window.showWarningMessage(
                 "You aren't logged in right now. Please Login."
             );
         }
         await setAccessToken("");
         await setRefreshToken("");
+        console.log("logging out");
         updateIsLoggedIn(false);
         spotifyApi.setAccessToken("");
         vscode.window.showInformationMessage(
@@ -371,6 +373,7 @@ export async function activate(context: vscode.ExtensionContext) {
         handlerId: string;
         payload?: any;
     }) {
+        spotifyApi.setAccessToken((await getAccessToken()) as string);
         switch (handlerId) {
             case "nextSong":
                 return await spotifyApi.skipToNext();

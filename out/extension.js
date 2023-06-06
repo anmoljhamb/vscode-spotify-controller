@@ -43,13 +43,13 @@ async function activate(context) {
     }
     catch (e) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");
-        (0, utils_1.updateIsLoggedIn)(false);
         console.log("Error while gettingMe");
+        (0, utils_1.updateIsLoggedIn)(false);
         console.error(e);
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", false, () => {
-        if (utils_1.isLoggedIn) {
+        if ((0, utils_1.getLoggedIn)()) {
             vscode.window.showWarningMessage("You are already logged in. Please log out to log in again.");
             return;
         }
@@ -57,11 +57,12 @@ async function activate(context) {
         vscode.env.openExternal(vscode.Uri.parse(utils_1.authUrl));
     });
     registerCommand("logout", false, async () => {
-        if (!utils_1.isLoggedIn) {
+        if (!(0, utils_1.getLoggedIn)()) {
             vscode.window.showWarningMessage("You aren't logged in right now. Please Login.");
         }
         await (0, utils_1.setAccessToken)("");
         await (0, utils_1.setRefreshToken)("");
+        console.log("logging out");
         (0, utils_1.updateIsLoggedIn)(false);
         utils_1.spotifyApi.setAccessToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
@@ -297,6 +298,7 @@ async function activate(context) {
         });
     }
     async function handleCommand({ handlerId, payload, }) {
+        utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
         switch (handlerId) {
             case "nextSong":
                 return await utils_1.spotifyApi.skipToNext();
