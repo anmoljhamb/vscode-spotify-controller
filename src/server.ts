@@ -6,7 +6,12 @@ import createHttpError from "http-errors";
 import morgan from "morgan";
 import path from "path";
 import { BACKEND_URI } from "./constants";
-import { setAccessToken, setRefreshInterval, setRefreshToken } from "./utils";
+import {
+    setAccessToken,
+    setRefreshInterval,
+    setRefreshToken,
+    spotifyApi,
+} from "./utils";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
@@ -28,6 +33,7 @@ app.get("/auth/callback", async (req, res, next) => {
             `${BACKEND_URI}/auth/grant?code=${code as string}`
         );
         const { access_token, refresh_token } = resp.data;
+        spotifyApi.setAccessToken(access_token);
         await setAccessToken(access_token);
         await setRefreshToken(refresh_token);
         setRefreshInterval();

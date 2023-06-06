@@ -109,6 +109,16 @@
                 "command": "spotify-controller.setVolume",
                 "category": "SpotifyController",
                 "title": "Set Volume"
+            },
+            {
+                "command": "spotify-controller.removeFromLikedSongs",
+                "category": "SpotifyController",
+                "title": "Remove current song from Liked Songs"
+            },
+            {
+                "command": "spotify-controller.addToLikedSongs",
+                "category": "SpotifyController",
+                "title": "Add current song to Liked Songs"
             }
         ],
         "configuration": [

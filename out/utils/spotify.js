@@ -13,6 +13,8 @@ exports.spotifyApi = new spotify_web_api_node_1.default({
 const scopes = [
     "user-read-private",
     "user-read-email",
+    "user-library-read",
+    "user-library-modify",
     "user-read-playback-state",
     "user-read-currently-playing",
     "user-modify-playback-state",

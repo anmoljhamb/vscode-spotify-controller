@@ -28,6 +28,7 @@ exports.app.get("/auth/callback", async (req, res, next) => {
     try {
         const resp = await axios_1.default.get(`${constants_1.BACKEND_URI}/auth/grant?code=${code}`);
         const { access_token, refresh_token } = resp.data;
+        utils_1.spotifyApi.setAccessToken(access_token);
         await (0, utils_1.setAccessToken)(access_token);
         await (0, utils_1.setRefreshToken)(refresh_token);
         (0, utils_1.setRefreshInterval)();

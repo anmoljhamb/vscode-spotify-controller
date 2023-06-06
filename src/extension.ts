@@ -149,6 +149,42 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    registerCommand("removeFromLikedSongs", true, async () => {
+        try {
+            const resp = await spotifyApi.getMyCurrentPlayingTrack();
+            if (!resp.body.item) {
+                throw new Error("Currently not playing anything");
+            }
+            const trackId = resp.body.item.id;
+            await handleCommand({
+                handlerId: "removeFromLikedSongs",
+                payload: trackId,
+            });
+            showInformationMessage(
+                "The song was removed from your liked songs."
+            );
+        } catch (e) {
+            handleError(e);
+        }
+    });
+
+    registerCommand("addToLikedSongs", true, async () => {
+        try {
+            const resp = await spotifyApi.getMyCurrentPlayingTrack();
+            if (!resp.body.item) {
+                throw new Error("Currently not playing anything");
+            }
+            const trackId = resp.body.item.id;
+            await handleCommand({
+                handlerId: "addToLikedSongs",
+                payload: trackId,
+            });
+            showInformationMessage("The song was added to your liked songs.");
+        } catch (e) {
+            handleError(e);
+        }
+    });
+
     registerCommand(
         "playTrackWithoutConfirmation",
         true,
@@ -325,6 +361,10 @@ export async function activate(context: vscode.ExtensionContext) {
             case "addToQueueWithoutConfirmation":
             case "addToQueue":
                 return await spotifyApi.addToQueue(payload);
+            case "addToLikedSongs":
+                return await spotifyApi.addToMySavedTracks([payload]);
+            case "removeFromLikedSongs":
+                return await spotifyApi.removeFromMySavedTracks([payload]);
             default:
                 vscode.window.showWarningMessage(
                     "The given command was not found."

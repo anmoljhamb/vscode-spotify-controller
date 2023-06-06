@@ -135,6 +135,40 @@ async function activate(context) {
         title: "Play track",
         handlerId: "playTrack",
     }));
+    registerCommand("removeFromLikedSongs", true, async () => {
+        try {
+            const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
+            if (!resp.body.item) {
+                throw new Error("Currently not playing anything");
+            }
+            const trackId = resp.body.item.id;
+            await handleCommand({
+                handlerId: "removeFromLikedSongs",
+                payload: trackId,
+            });
+            (0, utils_1.showInformationMessage)("The song was removed from your liked songs.");
+        }
+        catch (e) {
+            (0, utils_1.handleError)(e);
+        }
+    });
+    registerCommand("addToLikedSongs", true, async () => {
+        try {
+            const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
+            if (!resp.body.item) {
+                throw new Error("Currently not playing anything");
+            }
+            const trackId = resp.body.item.id;
+            await handleCommand({
+                handlerId: "addToLikedSongs",
+                payload: trackId,
+            });
+            (0, utils_1.showInformationMessage)("The song was added to your liked songs.");
+        }
+        catch (e) {
+            (0, utils_1.handleError)(e);
+        }
+    });
     registerCommand("playTrackWithoutConfirmation", true, playTrackTemplate({
         title: "Play Track Without Confirmation",
         handlerId: "playTrack",
@@ -268,6 +302,10 @@ async function activate(context) {
             case "addToQueueWithoutConfirmation":
             case "addToQueue":
                 return await utils_1.spotifyApi.addToQueue(payload);
+            case "addToLikedSongs":
+                return await utils_1.spotifyApi.addToMySavedTracks([payload]);
+            case "removeFromLikedSongs":
+                return await utils_1.spotifyApi.removeFromMySavedTracks([payload]);
             default:
                 vscode.window.showWarningMessage("The given command was not found.");
                 return;
