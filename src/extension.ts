@@ -62,8 +62,8 @@ export async function activate(context: vscode.ExtensionContext) {
         }
         await setAccessToken("");
         await setRefreshToken("");
+        updateIsLoggedIn(false);
         spotifyApi.setAccessToken("");
-        spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage(
             "Spotify account was successfully logged out"
         );

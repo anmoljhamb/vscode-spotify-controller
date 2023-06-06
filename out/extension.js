@@ -59,8 +59,8 @@ async function activate(context) {
         }
         await (0, utils_1.setAccessToken)("");
         await (0, utils_1.setRefreshToken)("");
+        (0, utils_1.updateIsLoggedIn)(false);
         utils_1.spotifyApi.setAccessToken("");
-        utils_1.spotifyApi.setRefreshToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
     registerCommand("setVolume", true, async () => {

@@ -29,6 +29,7 @@ export const refreshToken = async () => {
         await setAccessToken(resp.data.access_token);
         if (resp.data.refresh_token)
             await setRefreshToken(resp.data.refresh_token);
+        updateIsLoggedIn(true);
         console.log("Access Token refreshed successfully!");
     } catch (e) {
         console.log("error while refreshing");
