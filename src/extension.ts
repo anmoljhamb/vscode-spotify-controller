@@ -149,6 +149,56 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    registerCommand(
+        "playTrackWithoutConfirmation",
+        true,
+        playTrackTemplate({
+            title: "Play Track Without Confirmation",
+            handlerId: "playTrack",
+            confirm: false,
+        })
+    );
+
+    registerCommand(
+        "playTrackWithoutContextWithoutConfirmation",
+        true,
+        playTrackTemplate({
+            title: "Play Track Without Context",
+            handlerId: "playTrackWithoutContextWithoutConfirmation",
+            confirm: false,
+        })
+    );
+
+    registerCommand(
+        "playTrackWithoutContext",
+        true,
+        playTrackTemplate({
+            title: "Play Track Without Context",
+            handlerId: "playTrackWithoutContext",
+            confirm: true,
+        })
+    );
+
+    registerCommand(
+        "addToQueue",
+        true,
+        playTrackTemplate({
+            title: "Add Track To Queue",
+            handlerId: "addToQueue",
+            confirm: true,
+        })
+    );
+
+    registerCommand(
+        "addToQueueWithoutConfirmation",
+        true,
+        playTrackTemplate({
+            title: "Add Track To Queue",
+            handlerId: "addToQueueWithoutConfirmation",
+            confirm: false,
+        })
+    );
+
     registerCommand("removeFromLikedSongs", true, async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
@@ -184,36 +234,6 @@ export async function activate(context: vscode.ExtensionContext) {
             handleError(e);
         }
     });
-
-    registerCommand(
-        "playTrackWithoutConfirmation",
-        true,
-        playTrackTemplate({
-            title: "Play Track Without Confirmation",
-            handlerId: "playTrack",
-            confirm: false,
-        })
-    );
-
-    registerCommand(
-        "addToQueue",
-        true,
-        playTrackTemplate({
-            title: "Add Track To Queue",
-            handlerId: "addToQueue",
-            confirm: true,
-        })
-    );
-
-    registerCommand(
-        "addToQueueWithoutConfirmation",
-        true,
-        playTrackTemplate({
-            title: "Add Track To Queue",
-            handlerId: "addToQueueWithoutConfirmation",
-            confirm: false,
-        })
-    );
 
     registerCommand("seek", true, async () => {
         try {
@@ -365,6 +385,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 return await spotifyApi.addToMySavedTracks([payload]);
             case "removeFromLikedSongs":
                 return await spotifyApi.removeFromMySavedTracks([payload]);
+            case "playTrackWithoutContextWithoutConfirmation":
+            case "playTrackWithoutContext":
+                return await spotifyApi.play({ uris: [payload] });
             default:
                 vscode.window.showWarningMessage(
                     "The given command was not found."
