@@ -7,6 +7,7 @@ export const spotifyApi = new SpotifyWebApi({
 });
 
 const scopes = [
+    "playlist-read-private",
     "user-read-private",
     "user-read-email",
     "user-library-read",

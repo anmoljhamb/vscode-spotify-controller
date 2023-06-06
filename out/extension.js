@@ -137,18 +137,18 @@ async function activate(context) {
     }));
     registerCommand("playTrackWithoutConfirmation", true, playTrackTemplate({
         title: "Play Track Without Confirmation",
-        handlerId: "playTrack",
-        confirm: false,
-    }));
-    registerCommand("playTrackWithoutContextWithoutConfirmation", true, playTrackTemplate({
-        title: "Play Track Without Context",
-        handlerId: "playTrackWithoutContextWithoutConfirmation",
+        handlerId: "playTrackWithoutConfirmation",
         confirm: false,
     }));
     registerCommand("playTrackWithoutContext", true, playTrackTemplate({
         title: "Play Track Without Context",
         handlerId: "playTrackWithoutContext",
         confirm: true,
+    }));
+    registerCommand("playTrackWithoutContextWithoutConfirmation", true, playTrackTemplate({
+        title: "Play Track Without Context",
+        handlerId: "playTrackWithoutContextWithoutConfirmation",
+        confirm: false,
     }));
     registerCommand("addToQueue", true, playTrackTemplate({
         title: "Add Track To Queue",
@@ -307,17 +307,18 @@ async function activate(context) {
             case "seek":
                 return await utils_1.spotifyApi.seek(payload);
             case "playTrack":
+            case "playTrackWithoutConfirmation":
                 await utils_1.spotifyApi.addToQueue(payload);
                 return await utils_1.spotifyApi.skipToNext();
-            case "addToQueueWithoutConfirmation":
             case "addToQueue":
+            case "addToQueueWithoutConfirmation":
                 return await utils_1.spotifyApi.addToQueue(payload);
             case "addToLikedSongs":
                 return await utils_1.spotifyApi.addToMySavedTracks([payload]);
             case "removeFromLikedSongs":
                 return await utils_1.spotifyApi.removeFromMySavedTracks([payload]);
-            case "playTrackWithoutContextWithoutConfirmation":
             case "playTrackWithoutContext":
+            case "playTrackWithoutContextWithoutConfirmation":
                 return await utils_1.spotifyApi.play({ uris: [payload] });
             default:
                 vscode.window.showWarningMessage("The given command was not found.");

@@ -11,6 +11,7 @@ exports.spotifyApi = new spotify_web_api_node_1.default({
     redirectUri: constants_1.REDIRECT_URI,
 });
 const scopes = [
+    "playlist-read-private",
     "user-read-private",
     "user-read-email",
     "user-library-read",

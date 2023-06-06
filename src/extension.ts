@@ -154,17 +154,7 @@ export async function activate(context: vscode.ExtensionContext) {
         true,
         playTrackTemplate({
             title: "Play Track Without Confirmation",
-            handlerId: "playTrack",
-            confirm: false,
-        })
-    );
-
-    registerCommand(
-        "playTrackWithoutContextWithoutConfirmation",
-        true,
-        playTrackTemplate({
-            title: "Play Track Without Context",
-            handlerId: "playTrackWithoutContextWithoutConfirmation",
+            handlerId: "playTrackWithoutConfirmation",
             confirm: false,
         })
     );
@@ -176,6 +166,16 @@ export async function activate(context: vscode.ExtensionContext) {
             title: "Play Track Without Context",
             handlerId: "playTrackWithoutContext",
             confirm: true,
+        })
+    );
+
+    registerCommand(
+        "playTrackWithoutContextWithoutConfirmation",
+        true,
+        playTrackTemplate({
+            title: "Play Track Without Context",
+            handlerId: "playTrackWithoutContextWithoutConfirmation",
+            confirm: false,
         })
     );
 
@@ -376,17 +376,18 @@ export async function activate(context: vscode.ExtensionContext) {
             case "seek":
                 return await spotifyApi.seek(payload);
             case "playTrack":
+            case "playTrackWithoutConfirmation":
                 await spotifyApi.addToQueue(payload);
                 return await spotifyApi.skipToNext();
-            case "addToQueueWithoutConfirmation":
             case "addToQueue":
+            case "addToQueueWithoutConfirmation":
                 return await spotifyApi.addToQueue(payload);
             case "addToLikedSongs":
                 return await spotifyApi.addToMySavedTracks([payload]);
             case "removeFromLikedSongs":
                 return await spotifyApi.removeFromMySavedTracks([payload]);
-            case "playTrackWithoutContextWithoutConfirmation":
             case "playTrackWithoutContext":
+            case "playTrackWithoutContextWithoutConfirmation":
                 return await spotifyApi.play({ uris: [payload] });
             default:
                 vscode.window.showWarningMessage(
