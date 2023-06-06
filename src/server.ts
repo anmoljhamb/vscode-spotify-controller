@@ -1,11 +1,9 @@
 import * as vscode from "vscode";
 import axios from "axios";
 import cors from "cors";
-import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import morgan from "morgan";
-import path from "path";
 import { BACKEND_URI } from "./constants";
 import {
     setAccessToken,
@@ -15,7 +13,6 @@ import {
     spotifyApi,
     updateIsLoggedIn,
 } from "./utils";
-dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
 

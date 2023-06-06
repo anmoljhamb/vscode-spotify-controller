@@ -30,14 +30,11 @@ exports.app = void 0;
 const vscode = __importStar(require("vscode"));
 const axios_1 = __importDefault(require("axios"));
 const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const morgan_1 = __importDefault(require("morgan"));
-const path_1 = __importDefault(require("path"));
 const constants_1 = require("./constants");
 const utils_1 = require("./utils");
-dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
 exports.app = (0, express_1.default)();
 // 3rd party middlewares.
 exports.app.use((0, morgan_1.default)("dev"));
