@@ -34,9 +34,10 @@ app.get("/auth/callback", async (req, res, next) => {
         const resp = await axios.get(
             `${BACKEND_URI}/auth/grant?code=${code as string}`
         );
-        console.log(resp.data);
+        const { access_token, refresh_token } = resp.data;
+        await setAccessToken(access_token);
+        await setRefreshToken(refresh_token);
         /**
-         * todo save the access token, and the refresh token in the token manager
          * todo set the refresh interval
          */
         return res.send(

@@ -12,6 +12,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const constants_1 = require("./constants");
+const utils_1 = require("./utils");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
 exports.app = (0, express_1.default)();
 // 3rd party middlewares.
@@ -26,9 +27,10 @@ exports.app.get("/auth/callback", async (req, res, next) => {
     const { code } = req.query;
     try {
         const resp = await axios_1.default.get(`${constants_1.BACKEND_URI}/auth/grant?code=${code}`);
-        console.log(resp.data);
+        const { access_token, refresh_token } = resp.data;
+        await (0, utils_1.setAccessToken)(access_token);
+        await (0, utils_1.setRefreshToken)(refresh_token);
         /**
-         * todo save the access token, and the refresh token in the token manager
          * todo set the refresh interval
          */
         return res.send("You were authenticated successfully! You can close this window now.");
