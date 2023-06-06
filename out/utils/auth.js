@@ -39,6 +39,9 @@ const protectedCommand = (callback) => {
 };
 exports.protectedCommand = protectedCommand;
 const refreshToken = async () => {
+    /**
+     * todo refresh the token from the backend instead.
+     */
     console.log("refreshing token");
     spotify_1.spotifyApi.setRefreshToken((await (0, tokenManager_1.getRefreshToken)()));
     try {

@@ -11,7 +11,6 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const constants_1 = require("./constants");
-const utils_1 = require("./utils");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
 exports.app = (0, express_1.default)();
 // 3rd party middlewares.
@@ -22,29 +21,15 @@ exports.app.use(express_1.default.json());
 exports.app.get("/", (req, res) => {
     res.status(200).json({ message: "Working" });
 });
-exports.app.get("/auth/login", (req, res, next) => {
-    const scopes = [
-        "user-read-private",
-        "user-read-email",
-        "user-read-playback-state",
-        "user-read-currently-playing",
-        "user-modify-playback-state",
-        "app-remote-control",
-        "streaming",
-    ];
-    const authUrl = utils_1.spotifyApi.createAuthorizeURL(scopes, "some-state-of-my-choice");
-    return res.redirect(authUrl);
-});
 exports.app.get("/auth/callback", async (req, res, next) => {
     const { code } = req.query;
     try {
-        const data = await utils_1.spotifyApi.authorizationCodeGrant(code);
-        utils_1.spotifyApi.setAccessToken(data.body.access_token);
-        utils_1.spotifyApi.setRefreshToken(data.body.refresh_token);
-        await (0, utils_1.setAccessToken)(data.body.access_token);
-        await (0, utils_1.setRefreshToken)(data.body.refresh_token);
-        (0, utils_1.clearRefreshInterval)();
-        (0, utils_1.setRefreshInterval)();
+        console.log(code);
+        /**
+         * todo send this code to the backend uri, and make a grant, and return the refresh token, and the access token.
+         * todo save the access token, and the refresh token in the token manager
+         * todo set the refresh interval
+         */
         return res.send("You were authenticated successfully! You can close this window now.");
     }
     catch (e) {

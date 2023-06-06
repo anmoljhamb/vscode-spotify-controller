@@ -1,30 +1,19 @@
 import * as vscode from "vscode";
-import {
-    BACKEND_URI,
-    CLIENT_ID,
-    CLIENT_SECRET,
-    PORT,
-    appId,
-    commands,
-} from "./constants";
+import { BACKEND_URI, PORT, appId, commands } from "./constants";
+import { app } from "./server";
 import {
     getAccessToken,
     getPlayingStatus,
-    getRefreshToken,
     handleError,
-    handleResp,
-    isLoggedIn,
     protectedCommand,
     refreshToken,
     setAccessToken,
-    setRefreshInterval,
     setRefreshToken,
     showInformationMessage,
     spotifyApi,
     updateGlobalState,
     updateIsLoggedIn,
 } from "./utils";
-import { app } from "./server";
 
 const server = app.listen(PORT, () => {
     console.log(`Listening on the url *:${PORT}`);
@@ -33,15 +22,15 @@ const server = app.listen(PORT, () => {
 export async function activate(context: vscode.ExtensionContext) {
     updateGlobalState(context.globalState);
 
-    await refreshToken();
+    // await refreshToken();
 
-    spotifyApi.setAccessToken((await getAccessToken()) as string);
-    spotifyApi.setRefreshToken((await getRefreshToken()) as string);
+    // spotifyApi.setAccessToken((await getAccessToken()) as string);
+    // todo manage the tokens
 
     try {
         const user = await spotifyApi.getMe();
         updateIsLoggedIn(true);
-        setRefreshInterval();
+        // setRefreshInterval();
     } catch (e) {
         vscode.window.showWarningMessage(
             "Spotify Controller Not Logged In. Please Login"

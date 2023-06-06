@@ -27,39 +27,15 @@ app.get("/", (req, res) => {
     res.status(200).json({ message: "Working" });
 });
 
-app.get("/auth/login", (req, res, next) => {
-    const scopes = [
-        "user-read-private",
-        "user-read-email",
-        "user-read-playback-state",
-        "user-read-currently-playing",
-        "user-modify-playback-state",
-        "app-remote-control",
-        "streaming",
-    ];
-
-    const authUrl = spotifyApi.createAuthorizeURL(
-        scopes,
-        "some-state-of-my-choice"
-    );
-
-    return res.redirect(authUrl);
-});
-
 app.get("/auth/callback", async (req, res, next) => {
     const { code } = req.query;
     try {
-        const data = await spotifyApi.authorizationCodeGrant(code as string);
-
-        spotifyApi.setAccessToken(data.body.access_token);
-        spotifyApi.setRefreshToken(data.body.refresh_token);
-
-        await setAccessToken(data.body.access_token);
-        await setRefreshToken(data.body.refresh_token);
-
-        clearRefreshInterval();
-        setRefreshInterval();
-
+        console.log(code);
+        /**
+         * todo send this code to the backend uri, and make a grant, and return the refresh token, and the access token.
+         * todo save the access token, and the refresh token in the token manager
+         * todo set the refresh interval
+         */
         return res.send(
             "You were authenticated successfully! You can close this window now."
         );

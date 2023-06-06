@@ -4,17 +4,12 @@ export const appId = "spotify-controller";
 export const PORT: number = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerApiPort") as number;
-export const BACKEND_URI = `http://localhost:${PORT}`;
-export const CLIENT_ID: string = vscode.workspace
-    .getConfiguration()
-    .get("spotifyControllerClientId") as string;
-export const CLIENT_SECRET: string = vscode.workspace
-    .getConfiguration()
-    .get("spotifyControllerClientSecret") as string;
+export const BACKEND_URI = `https://vscode-spotify-controller-server.vercel.app`;
+export const CLIENT_ID = "1ecb3b66444c48918e9a3c282a18ab01";
 export const SHOW_ALERTS: boolean = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerShowInformationAlerts") as boolean;
-export const REDIRECT_URI = `${BACKEND_URI}/auth/callback`;
+export const REDIRECT_URI = `http://localhost:${PORT}/auth/callback`;
 
 export const commands: RegisterSpotifyCommand[] = [
     {

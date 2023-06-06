@@ -26,20 +26,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 const constants_1 = require("./constants");
-const utils_1 = require("./utils");
 const server_1 = require("./server");
+const utils_1 = require("./utils");
 const server = server_1.app.listen(constants_1.PORT, () => {
     console.log(`Listening on the url *:${constants_1.PORT}`);
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
-    await (0, utils_1.refreshToken)();
-    utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
-    utils_1.spotifyApi.setRefreshToken((await (0, utils_1.getRefreshToken)()));
+    // await refreshToken();
+    // spotifyApi.setAccessToken((await getAccessToken()) as string);
+    // todo manage the tokens
     try {
         const user = await utils_1.spotifyApi.getMe();
         (0, utils_1.updateIsLoggedIn)(true);
-        (0, utils_1.setRefreshInterval)();
+        // setRefreshInterval();
     }
     catch (e) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");

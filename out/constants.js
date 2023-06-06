@@ -23,23 +23,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commands = exports.REDIRECT_URI = exports.SHOW_ALERTS = exports.CLIENT_SECRET = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
+exports.commands = exports.REDIRECT_URI = exports.SHOW_ALERTS = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
 const vscode = __importStar(require("vscode"));
 exports.appId = "spotify-controller";
 exports.PORT = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerApiPort");
-exports.BACKEND_URI = `http://localhost:${exports.PORT}`;
-exports.CLIENT_ID = vscode.workspace
-    .getConfiguration()
-    .get("spotifyControllerClientId");
-exports.CLIENT_SECRET = vscode.workspace
-    .getConfiguration()
-    .get("spotifyControllerClientSecret");
+exports.BACKEND_URI = `https://vscode-spotify-controller-server.vercel.app`;
+exports.CLIENT_ID = "1ecb3b66444c48918e9a3c282a18ab01";
 exports.SHOW_ALERTS = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerShowInformationAlerts");
-exports.REDIRECT_URI = `${exports.BACKEND_URI}/auth/callback`;
+exports.REDIRECT_URI = `http://localhost:${exports.PORT}/auth/callback`;
 exports.commands = [
     {
         commandId: "nextSong",
