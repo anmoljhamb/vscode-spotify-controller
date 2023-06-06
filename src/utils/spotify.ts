@@ -6,6 +6,21 @@ export const spotifyApi = new SpotifyWebApi({
     redirectUri: REDIRECT_URI,
 });
 
+const scopes = [
+    "user-read-private",
+    "user-read-email",
+    "user-read-playback-state",
+    "user-read-currently-playing",
+    "user-modify-playback-state",
+    "app-remote-control",
+    "streaming",
+];
+
+export const authUrl = spotifyApi.createAuthorizeURL(
+    scopes,
+    "some-state-of-my-choice"
+);
+
 export const getPlayingStatus = async () => {
     const resp = await spotifyApi.getMyCurrentPlaybackState();
     handleResp(resp);

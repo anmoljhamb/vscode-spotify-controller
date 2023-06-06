@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { BACKEND_URI, PORT, appId, commands } from "./constants";
 import { app } from "./server";
 import {
+    authUrl,
     getAccessToken,
     getPlayingStatus,
     handleError,
@@ -44,7 +45,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage(
             "Opening the login url. Please Authenticate."
         );
-        vscode.env.openExternal(vscode.Uri.parse(`${BACKEND_URI}/auth/login`));
+        vscode.env.openExternal(vscode.Uri.parse(authUrl));
     });
 
     registerCommand("logout", false, async () => {

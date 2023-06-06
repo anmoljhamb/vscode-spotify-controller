@@ -24,7 +24,6 @@ exports.app.get("/", (req, res) => {
 exports.app.get("/auth/callback", async (req, res, next) => {
     const { code } = req.query;
     try {
-        console.log(code);
         /**
          * todo send this code to the backend uri, and make a grant, and return the refresh token, and the access token.
          * todo save the access token, and the refresh token in the token manager

@@ -29,7 +29,7 @@ exports.appId = "spotify-controller";
 exports.PORT = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerApiPort");
-exports.BACKEND_URI = `https://vscode-spotify-controller-server.vercel.app`;
+exports.BACKEND_URI = `http://localhost:8080`;
 exports.CLIENT_ID = "1ecb3b66444c48918e9a3c282a18ab01";
 exports.SHOW_ALERTS = vscode.workspace
     .getConfiguration()

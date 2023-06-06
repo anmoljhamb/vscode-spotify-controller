@@ -48,7 +48,7 @@ async function activate(context) {
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", false, () => {
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
-        vscode.env.openExternal(vscode.Uri.parse(`${constants_1.BACKEND_URI}/auth/login`));
+        vscode.env.openExternal(vscode.Uri.parse(utils_1.authUrl));
     });
     registerCommand("logout", false, async () => {
         await (0, utils_1.setAccessToken)("");
