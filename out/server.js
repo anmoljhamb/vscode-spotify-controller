@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const axios_1 = __importDefault(require("axios"));
-const express_1 = __importDefault(require("express"));
-const path_1 = __importDefault(require("path"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const express_1 = __importDefault(require("express"));
 const http_errors_1 = __importDefault(require("http-errors"));
+const morgan_1 = __importDefault(require("morgan"));
+const path_1 = __importDefault(require("path"));
 const constants_1 = require("./constants");
 const utils_1 = require("./utils");
 dotenv_1.default.config({ path: path_1.default.join(__dirname, "..", ".env") });
@@ -30,9 +30,7 @@ exports.app.get("/auth/callback", async (req, res, next) => {
         const { access_token, refresh_token } = resp.data;
         await (0, utils_1.setAccessToken)(access_token);
         await (0, utils_1.setRefreshToken)(refresh_token);
-        /**
-         * todo set the refresh interval
-         */
+        (0, utils_1.setRefreshInterval)();
         return res.send("You were authenticated successfully! You can close this window now.");
     }
     catch (e) {

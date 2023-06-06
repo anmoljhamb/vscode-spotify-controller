@@ -22,11 +22,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.clearRefreshInterval = exports.setRefreshInterval = exports.refreshInterval = exports.intervalTime = exports.refreshToken = exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
+const axios_1 = __importDefault(require("axios"));
 const vscode = __importStar(require("vscode"));
+const constants_1 = require("../constants");
 const tokenManager_1 = require("./tokenManager");
-const spotify_1 = require("./spotify");
 exports.isLoggedIn = false;
 let updateIsLoggedIn = (status) => (exports.isLoggedIn = status);
 exports.updateIsLoggedIn = updateIsLoggedIn;
@@ -39,22 +43,19 @@ const protectedCommand = (callback) => {
 };
 exports.protectedCommand = protectedCommand;
 const refreshToken = async () => {
-    /**
-     * todo refresh the token from the backend instead.
-     */
-    console.log("refreshing token");
-    spotify_1.spotifyApi.setRefreshToken((await (0, tokenManager_1.getRefreshToken)()));
+    let _refreshToken = (await (0, tokenManager_1.getRefreshToken)());
     try {
-        let resp = await spotify_1.spotifyApi.refreshAccessToken();
-        await (0, tokenManager_1.setAccessToken)(resp.body.access_token);
-        let _refreshToken = resp.body.refresh_token;
-        if (_refreshToken)
-            await (0, tokenManager_1.setRefreshToken)(_refreshToken);
+        const resp = await axios_1.default.post(`${constants_1.BACKEND_URI}/auth/refreshToken`, {
+            refreshToken: _refreshToken,
+        });
+        await (0, tokenManager_1.setAccessToken)(resp.data.access_token);
+        if (resp.data.refresh_token)
+            await (0, tokenManager_1.setRefreshToken)(resp.data.refresh_token);
+        console.log("Access Token refreshed successfully!");
     }
     catch (e) {
+        console.log("error while refreshing");
         console.log(e);
-        await (0, tokenManager_1.setAccessToken)("");
-        await (0, tokenManager_1.setRefreshToken)("");
     }
 };
 exports.refreshToken = refreshToken;

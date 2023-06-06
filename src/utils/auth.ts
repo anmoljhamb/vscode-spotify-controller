@@ -1,10 +1,11 @@
+import axios from "axios";
 import * as vscode from "vscode";
+import { BACKEND_URI } from "../constants";
 import {
     getRefreshToken,
     setAccessToken,
     setRefreshToken,
 } from "./tokenManager";
-import { spotifyApi } from "./spotify";
 
 export let isLoggedIn = false;
 
@@ -20,20 +21,18 @@ export const protectedCommand = (callback: () => void) => {
 };
 
 export const refreshToken = async () => {
-    /**
-     * todo refresh the token from the backend instead.
-     */
-    console.log("refreshing token");
-    spotifyApi.setRefreshToken((await getRefreshToken()) as string);
+    let _refreshToken = (await getRefreshToken()) as string;
     try {
-        let resp = await spotifyApi.refreshAccessToken();
-        await setAccessToken(resp.body.access_token);
-        let _refreshToken = resp.body.refresh_token;
-        if (_refreshToken) await setRefreshToken(_refreshToken);
+        const resp = await axios.post(`${BACKEND_URI}/auth/refreshToken`, {
+            refreshToken: _refreshToken,
+        });
+        await setAccessToken(resp.data.access_token);
+        if (resp.data.refresh_token)
+            await setRefreshToken(resp.data.refresh_token);
+        console.log("Access Token refreshed successfully!");
     } catch (e) {
+        console.log("error while refreshing");
         console.log(e);
-        await setAccessToken("");
-        await setRefreshToken("");
     }
 };
 

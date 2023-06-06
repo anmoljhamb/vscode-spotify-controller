@@ -1,19 +1,12 @@
-import * as vscode from "vscode";
 import axios from "axios";
-import express, { NextFunction, Request, Response } from "express";
-import path from "path";
-import dotenv from "dotenv";
-import morgan from "morgan";
 import cors from "cors";
+import dotenv from "dotenv";
+import express, { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
+import morgan from "morgan";
+import path from "path";
 import { BACKEND_URI } from "./constants";
-import {
-    clearRefreshInterval,
-    setAccessToken,
-    setRefreshInterval,
-    setRefreshToken,
-    spotifyApi,
-} from "./utils";
+import { setAccessToken, setRefreshInterval, setRefreshToken } from "./utils";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 export const app = express();
@@ -37,9 +30,7 @@ app.get("/auth/callback", async (req, res, next) => {
         const { access_token, refresh_token } = resp.data;
         await setAccessToken(access_token);
         await setRefreshToken(refresh_token);
-        /**
-         * todo set the refresh interval
-         */
+        setRefreshInterval();
         return res.send(
             "You were authenticated successfully! You can close this window now."
         );

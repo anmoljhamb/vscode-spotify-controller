@@ -33,13 +33,12 @@ const server = server_1.app.listen(constants_1.PORT, () => {
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
-    // await refreshToken();
-    // spotifyApi.setAccessToken((await getAccessToken()) as string);
-    // todo manage the tokens
+    await (0, utils_1.refreshToken)();
+    utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
     try {
         const user = await utils_1.spotifyApi.getMe();
         (0, utils_1.updateIsLoggedIn)(true);
-        // setRefreshInterval();
+        (0, utils_1.setRefreshInterval)();
     }
     catch (e) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");
