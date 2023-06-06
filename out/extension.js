@@ -46,10 +46,17 @@ async function activate(context) {
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", false, () => {
+        if (utils_1.isLoggedIn) {
+            vscode.window.showWarningMessage("You are already logged in. Please log out to log in again.");
+            return;
+        }
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
         vscode.env.openExternal(vscode.Uri.parse(utils_1.authUrl));
     });
     registerCommand("logout", false, async () => {
+        if (!utils_1.isLoggedIn) {
+            vscode.window.showWarningMessage("You aren't logged in right now. Please Login.");
+        }
         await (0, utils_1.setAccessToken)("");
         await (0, utils_1.setRefreshToken)("");
         utils_1.spotifyApi.setAccessToken("");

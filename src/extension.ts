@@ -6,6 +6,7 @@ import {
     getAccessToken,
     getPlayingStatus,
     handleError,
+    isLoggedIn,
     protectedCommand,
     refreshToken,
     setAccessToken,
@@ -41,6 +42,12 @@ export async function activate(context: vscode.ExtensionContext) {
     commands.forEach((command) => registerSpotifyCommand(command));
 
     registerCommand("login", false, () => {
+        if (isLoggedIn) {
+            vscode.window.showWarningMessage(
+                "You are already logged in. Please log out to log in again."
+            );
+            return;
+        }
         vscode.window.showInformationMessage(
             "Opening the login url. Please Authenticate."
         );
@@ -48,6 +55,11 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     registerCommand("logout", false, async () => {
+        if (!isLoggedIn) {
+            vscode.window.showWarningMessage(
+                "You aren't logged in right now. Please Login."
+            );
+        }
         await setAccessToken("");
         await setRefreshToken("");
         spotifyApi.setAccessToken("");
