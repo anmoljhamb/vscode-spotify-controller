@@ -36,13 +36,16 @@ async function activate(context) {
     await (0, utils_1.refreshToken)();
     utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
     try {
-        const user = await utils_1.spotifyApi.getMe();
+        await utils_1.spotifyApi.getMe();
+        console.log("spotifyApi.getMe was successful!");
         (0, utils_1.updateIsLoggedIn)(true);
         (0, utils_1.setRefreshInterval)();
     }
     catch (e) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");
         (0, utils_1.updateIsLoggedIn)(false);
+        console.log("Error while gettingMe");
+        console.error(e);
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", false, () => {

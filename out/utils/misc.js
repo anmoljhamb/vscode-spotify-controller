@@ -29,7 +29,7 @@ const constants_1 = require("../constants");
 const handleError = (e) => {
     if (e instanceof Error)
         vscode.window.showErrorMessage(e.message);
-    console.log(e);
+    console.error(e);
 };
 exports.handleError = handleError;
 const showInformationMessage = (message) => {

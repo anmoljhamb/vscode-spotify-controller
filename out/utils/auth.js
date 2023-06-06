@@ -26,16 +26,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearRefreshInterval = exports.setRefreshInterval = exports.refreshInterval = exports.intervalTime = exports.refreshToken = exports.protectedCommand = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
+exports.clearRefreshInterval = exports.setRefreshInterval = exports.refreshInterval = exports.intervalTime = exports.refreshToken = exports.protectedCommand = exports.getLoggedIn = exports.updateIsLoggedIn = exports.isLoggedIn = void 0;
 const axios_1 = __importDefault(require("axios"));
 const vscode = __importStar(require("vscode"));
 const constants_1 = require("../constants");
 const tokenManager_1 = require("./tokenManager");
 exports.isLoggedIn = false;
-let updateIsLoggedIn = (status) => (exports.isLoggedIn = status);
+let updateIsLoggedIn = (status) => {
+    console.log(`Updating the isLoggedIn variable to ${status}`);
+    exports.isLoggedIn = status;
+};
 exports.updateIsLoggedIn = updateIsLoggedIn;
+const getLoggedIn = () => exports.isLoggedIn;
+exports.getLoggedIn = getLoggedIn;
 const protectedCommand = (callback) => {
-    if (exports.isLoggedIn)
+    if ((0, exports.getLoggedIn)())
         return callback;
     return () => {
         vscode.window.showWarningMessage("You are currently not logged in. You need to login.");
@@ -55,17 +60,19 @@ const refreshToken = async () => {
         console.log("Access Token refreshed successfully!");
     }
     catch (e) {
-        console.log("error while refreshing");
-        console.log(e);
+        console.log("Error while refreshing");
+        console.error(e);
     }
 };
 exports.refreshToken = refreshToken;
 exports.intervalTime = (3600 - 60) * 1000;
 const setRefreshInterval = () => {
+    console.log("setting refresh interval");
     exports.refreshInterval = setInterval(exports.refreshToken, exports.intervalTime);
 };
 exports.setRefreshInterval = setRefreshInterval;
 const clearRefreshInterval = () => {
+    console.log("clear refresh interval");
     if (exports.refreshInterval)
         clearInterval(exports.refreshInterval);
 };

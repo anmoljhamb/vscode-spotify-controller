@@ -29,7 +29,8 @@ export async function activate(context: vscode.ExtensionContext) {
     spotifyApi.setAccessToken((await getAccessToken()) as string);
 
     try {
-        const user = await spotifyApi.getMe();
+        await spotifyApi.getMe();
+        console.log("spotifyApi.getMe was successful!");
         updateIsLoggedIn(true);
         setRefreshInterval();
     } catch (e) {
@@ -37,6 +38,8 @@ export async function activate(context: vscode.ExtensionContext) {
             "Spotify Controller Not Logged In. Please Login"
         );
         updateIsLoggedIn(false);
+        console.log("Error while gettingMe");
+        console.error(e);
     }
 
     commands.forEach((command) => registerSpotifyCommand(command));

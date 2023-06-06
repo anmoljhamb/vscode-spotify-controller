@@ -9,10 +9,15 @@ import {
 
 export let isLoggedIn = false;
 
-export let updateIsLoggedIn = (status: boolean) => (isLoggedIn = status);
+export let updateIsLoggedIn = (status: boolean) => {
+    console.log(`Updating the isLoggedIn variable to ${status}`);
+    isLoggedIn = status;
+};
+
+export const getLoggedIn = () => isLoggedIn;
 
 export const protectedCommand = (callback: () => void) => {
-    if (isLoggedIn) return callback;
+    if (getLoggedIn()) return callback;
     return () => {
         vscode.window.showWarningMessage(
             "You are currently not logged in. You need to login."
@@ -32,8 +37,8 @@ export const refreshToken = async () => {
         updateIsLoggedIn(true);
         console.log("Access Token refreshed successfully!");
     } catch (e) {
-        console.log("error while refreshing");
-        console.log(e);
+        console.log("Error while refreshing");
+        console.error(e);
     }
 };
 
@@ -42,9 +47,11 @@ export const intervalTime = (3600 - 60) * 1000;
 export let refreshInterval: NodeJS.Timer;
 
 export const setRefreshInterval = () => {
+    console.log("setting refresh interval");
     refreshInterval = setInterval(refreshToken, intervalTime);
 };
 
 export const clearRefreshInterval = () => {
+    console.log("clear refresh interval");
     if (refreshInterval) clearInterval(refreshInterval);
 };
