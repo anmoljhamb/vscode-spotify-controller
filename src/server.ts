@@ -1,3 +1,4 @@
+import * as vscode from "vscode";
 import axios from "axios";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -10,7 +11,9 @@ import {
     setAccessToken,
     setRefreshInterval,
     setRefreshToken,
+    showInformationMessage,
     spotifyApi,
+    updateIsLoggedIn,
 } from "./utils";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
@@ -37,6 +40,10 @@ app.get("/auth/callback", async (req, res, next) => {
         await setAccessToken(access_token);
         await setRefreshToken(refresh_token);
         setRefreshInterval();
+        updateIsLoggedIn(true);
+        vscode.window.showInformationMessage(
+            "The user was logged in successfully!"
+        );
         return res.send(
             "You were authenticated successfully! You can close this window now."
         );
