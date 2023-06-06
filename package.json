@@ -115,20 +115,10 @@
             {
                 "title": "Spotify Controller",
                 "properties": {
-                    "spotifyControllerApiPort": {
-                        "description": "Run the API server on the given port",
-                        "type": "number",
-                        "default": 61234
-                    },
                     "spotifyControllerClientId": {
-                        "description": "Enter your own client id from the developer spotify console",
+                        "description": "The client ID from the spotify developer console",
                         "type": "string",
-                        "default": "clientId"
-                    },
-                    "spotifyControllerClientSecret": {
-                        "description": "Enter your own client secret from the developer spotify console",
-                        "type": "string",
-                        "default": "clientSecret"
+                        "default": "1ecb3b66444c48918e9a3c282a18ab01"
                     },
                     "spotifyControllerShowInformationAlerts": {
                         "description": "Show information alerts when a given action is successful.",
