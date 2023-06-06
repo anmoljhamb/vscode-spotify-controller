@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
+const axios_1 = __importDefault(require("axios"));
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -24,8 +25,9 @@ exports.app.get("/", (req, res) => {
 exports.app.get("/auth/callback", async (req, res, next) => {
     const { code } = req.query;
     try {
+        const resp = await axios_1.default.get(`${constants_1.BACKEND_URI}/auth/grant?code=${code}`);
+        console.log(resp.data);
         /**
-         * todo send this code to the backend uri, and make a grant, and return the refresh token, and the access token.
          * todo save the access token, and the refresh token in the token manager
          * todo set the refresh interval
          */

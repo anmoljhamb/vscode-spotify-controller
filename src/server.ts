@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import axios from "axios";
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import dotenv from "dotenv";
@@ -30,8 +31,11 @@ app.get("/", (req, res) => {
 app.get("/auth/callback", async (req, res, next) => {
     const { code } = req.query;
     try {
+        const resp = await axios.get(
+            `${BACKEND_URI}/auth/grant?code=${code as string}`
+        );
+        console.log(resp.data);
         /**
-         * todo send this code to the backend uri, and make a grant, and return the refresh token, and the access token.
          * todo save the access token, and the refresh token in the token manager
          * todo set the refresh interval
          */
