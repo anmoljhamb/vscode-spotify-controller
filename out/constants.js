@@ -26,11 +26,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.commands = exports.REDIRECT_URI = exports.SHOW_ALERTS = exports.CLIENT_ID = exports.BACKEND_URI = exports.PORT = exports.appId = void 0;
 const vscode = __importStar(require("vscode"));
 exports.appId = "spotify-controller";
-exports.PORT = vscode.workspace
-    .getConfiguration()
-    .get("spotifyControllerApiPort");
+exports.PORT = 61234;
 exports.BACKEND_URI = `https://vscode-spotify-controller-server.vercel.app`;
-exports.CLIENT_ID = "1ecb3b66444c48918e9a3c282a18ab01";
+exports.CLIENT_ID = vscode.workspace
+    .getConfiguration()
+    .get("spotifyControllerClientId");
 exports.SHOW_ALERTS = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerShowInformationAlerts");

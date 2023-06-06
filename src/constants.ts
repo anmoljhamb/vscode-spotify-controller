@@ -5,7 +5,7 @@ export const PORT = 61234;
 export const BACKEND_URI = `https://vscode-spotify-controller-server.vercel.app`;
 export const CLIENT_ID: string = vscode.workspace
     .getConfiguration()
-    .get("1ecb3b66444c48918e9a3c282a18ab01") as string;
+    .get("spotifyControllerClientId") as string;
 export const SHOW_ALERTS: boolean = vscode.workspace
     .getConfiguration()
     .get("spotifyControllerShowInformationAlerts") as boolean;
