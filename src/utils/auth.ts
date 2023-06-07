@@ -1,11 +1,13 @@
 import axios from "axios";
-import { BACKEND_URI } from "../constants";
+import * as vscode from "vscode";
+import { BACKEND_URI, appId } from "../constants";
 import {
     getRefreshToken,
     setAccessToken,
     setLoggedInState,
     setRefreshToken,
 } from "./tokenManager";
+import { authUrl } from "./spotify";
 
 export const refreshToken = async () => {
     let _refreshToken = (await getRefreshToken()) as string;
@@ -36,4 +38,15 @@ export const setRefreshInterval = () => {
 export const clearRefreshInterval = () => {
     console.log("clear refresh interval");
     if (refreshInterval) clearInterval(refreshInterval);
+};
+
+export const showLoginMessage = async () => {
+    const choice = await vscode.window.showWarningMessage(
+        "You're currently not logged in. Please Login",
+        "Login"
+    );
+    if (!choice) return;
+    if (choice) {
+        vscode.commands.executeCommand(`${appId}.login`);
+    }
 };

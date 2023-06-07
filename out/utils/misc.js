@@ -26,10 +26,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.showInformationMessage = exports.handleError = void 0;
 const vscode = __importStar(require("vscode"));
 const constants_1 = require("../constants");
+const auth_1 = require("./auth");
 const handleError = (e) => {
     if (e instanceof Error) {
         if (e.name === "WebapiRegularError") {
-            vscode.window.showWarningMessage("You are not logged in. Please login.");
+            (0, auth_1.showLoginMessage)();
         }
         else
             vscode.window.showErrorMessage(e.message);

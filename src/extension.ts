@@ -13,6 +13,7 @@ import {
     setRefreshInterval,
     setRefreshToken,
     showInformationMessage,
+    showLoginMessage,
     spotifyApi,
     updateGlobalState,
 } from "./utils";
@@ -33,9 +34,7 @@ export async function activate(context: vscode.ExtensionContext) {
         await setLoggedInState(true);
         setRefreshInterval();
     } catch (e) {
-        vscode.window.showWarningMessage(
-            "Spotify Controller Not Logged In. Please Login"
-        );
+        showLoginMessage();
         console.log("Error while gettingMe");
         await setLoggedInState(false);
         console.error(e);
@@ -45,9 +44,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand("login", async () => {
         if ((await getLoggedInState()) as boolean) {
-            vscode.window.showWarningMessage(
-                "You are already logged in. Please log out to log in again."
-            );
+            showLoginMessage();
             return;
         }
         vscode.window.showInformationMessage(
@@ -58,9 +55,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand("logout", async () => {
         if (!((await getLoggedInState()) as boolean)) {
-            vscode.window.showWarningMessage(
-                "You aren't logged in right now. Please Login."
-            );
+            showLoginMessage();
         }
         await setAccessToken("");
         await setRefreshToken("");
@@ -380,9 +375,7 @@ export async function activate(context: vscode.ExtensionContext) {
         payload?: any;
     }) {
         if (!(await getLoggedInState()) as boolean) {
-            vscode.window.showWarningMessage(
-                "You're not logged in. Please Login."
-            );
+            showLoginMessage();
             return;
         }
         spotifyApi.setAccessToken((await getAccessToken()) as string);

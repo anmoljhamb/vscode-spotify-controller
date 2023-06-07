@@ -1,12 +1,11 @@
 import * as vscode from "vscode";
 import { SHOW_ALERTS } from "../constants";
+import { showLoginMessage } from "./auth";
 
 export const handleError = (e: any) => {
     if (e instanceof Error) {
         if (e.name === "WebapiRegularError") {
-            vscode.window.showWarningMessage(
-                "You are not logged in. Please login."
-            );
+            showLoginMessage();
         } else vscode.window.showErrorMessage(e.message);
     }
     console.error(e);
