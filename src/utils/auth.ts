@@ -4,17 +4,9 @@ import { BACKEND_URI } from "../constants";
 import {
     getRefreshToken,
     setAccessToken,
+    setLoggedInState,
     setRefreshToken,
 } from "./tokenManager";
-
-export let isLoggedIn = false;
-
-export let updateIsLoggedIn = (status: boolean) => {
-    console.log(`Updating the isLoggedIn variable to ${status}`);
-    isLoggedIn = status;
-};
-
-export const getLoggedIn = () => isLoggedIn;
 
 export const protectedCommand = (callback: () => void) => {
     if (getLoggedIn()) return callback;
@@ -34,7 +26,7 @@ export const refreshToken = async () => {
         await setAccessToken(resp.data.access_token);
         if (resp.data.refresh_token)
             await setRefreshToken(resp.data.refresh_token);
-        updateIsLoggedIn(true);
+        await setLoggedInState(true);
         console.log("Access Token refreshed successfully!");
     } catch (e) {
         console.log("Error while refreshing");

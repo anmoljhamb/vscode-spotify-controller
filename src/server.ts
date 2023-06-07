@@ -7,11 +7,11 @@ import morgan from "morgan";
 import { BACKEND_URI } from "./constants";
 import {
     setAccessToken,
+    setLoggedInState,
     setRefreshInterval,
     setRefreshToken,
     showInformationMessage,
     spotifyApi,
-    updateIsLoggedIn,
 } from "./utils";
 
 export const app = express();
@@ -36,8 +36,8 @@ app.get("/auth/callback", async (req, res, next) => {
         spotifyApi.setAccessToken(access_token);
         await setAccessToken(access_token);
         await setRefreshToken(refresh_token);
+        await setLoggedInState(true);
         setRefreshInterval();
-        updateIsLoggedIn(true);
         vscode.window.showInformationMessage(
             "The user was logged in successfully!"
         );
