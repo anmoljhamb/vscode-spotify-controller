@@ -135,6 +135,11 @@
                 "title": "Set Volume"
             },
             {
+                "command": "spotify-controller.copyToClipboard",
+                "category": "SpotifyController",
+                "title": "Copy current song to Clipboard"
+            },
+            {
                 "command": "spotify-controller.removeFromLikedSongs",
                 "category": "SpotifyController",
                 "title": "Remove current song from Liked Songs"

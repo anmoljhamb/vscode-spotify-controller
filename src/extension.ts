@@ -210,8 +210,8 @@ export async function activate(context: vscode.ExtensionContext) {
         if (!chosenArtist) return;
         await handleCommand({
             handlerId: "playArtist",
-            payload: chosenArtist.uri
-        })
+            payload: chosenArtist.uri,
+        });
     });
 
     registerCommand("playPlaylist", async () => {
@@ -253,6 +253,16 @@ export async function activate(context: vscode.ExtensionContext) {
         });
         showInformationMessage(
             `The playlist ${choice} was played successfully!`
+        );
+    });
+
+    registerCommand("copyToClipboard", async () => {
+        const resp = await spotifyApi.getMyCurrentPlayingTrack();
+        if (!resp.body.item) throw new Error("Currently not playing anything");
+        const url = resp.body.item.external_urls.spotify;
+        await vscode.env.clipboard.writeText(url);
+        showInformationMessage(
+            "The link was copied to clipboard successfully!"
         );
     });
 

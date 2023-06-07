@@ -180,7 +180,7 @@ async function activate(context) {
             return;
         await handleCommand({
             handlerId: "playArtist",
-            payload: chosenArtist.uri
+            payload: chosenArtist.uri,
         });
     });
     registerCommand("playPlaylist", async () => {
@@ -216,6 +216,14 @@ async function activate(context) {
             payload: chosenTrack.uri,
         });
         (0, utils_1.showInformationMessage)(`The playlist ${choice} was played successfully!`);
+    });
+    registerCommand("copyToClipboard", async () => {
+        const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
+        if (!resp.body.item)
+            throw new Error("Currently not playing anything");
+        const url = resp.body.item.external_urls.spotify;
+        await vscode.env.clipboard.writeText(url);
+        (0, utils_1.showInformationMessage)("The link was copied to clipboard successfully!");
     });
     registerCommand("removeFromLikedSongs", async () => {
         const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
