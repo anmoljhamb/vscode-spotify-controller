@@ -2,6 +2,14 @@
     "name": "spotify-controller",
     "displayName": "SpotifyController",
     "description": "To be edited later",
+    "author": {
+        "name": "Anmol Jhamb",
+        "email": "talktoanmol@outlook.com",
+        "url": "https://anmoljhamb.vercel.app"
+    },
+    "repository": {
+        "url": "https://github.com/anmoljhamb/vscode-spotify-controller"
+    },
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.78.0"
