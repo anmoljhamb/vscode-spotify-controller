@@ -88,22 +88,22 @@
             {
                 "command": "spotify-controller.playTrack",
                 "category": "SpotifyController",
-                "title": "Play Track"
+                "title": "Play Track With In Context"
             },
             {
                 "command": "spotify-controller.playTrackWithoutConfirmation",
                 "category": "SpotifyController",
-                "title": "Play Track Without Confirmation"
+                "title": "Play Track With In Context Without Confirmation"
             },
             {
                 "command": "spotify-controller.playTrackWithoutContext",
                 "category": "SpotifyController",
-                "title": "Play Track Without Context"
+                "title": "Play Track"
             },
             {
                 "command": "spotify-controller.playTrackWithoutContextWithoutConfirmation",
                 "category": "SpotifyController",
-                "title": "Play Track Without Context and Confirmation"
+                "title": "Play Track and Confirmation"
             },
             {
                 "command": "spotify-controller.switchDevice",
