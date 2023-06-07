@@ -225,6 +225,14 @@ async function activate(context) {
         await vscode.env.clipboard.writeText(url);
         (0, utils_1.showInformationMessage)("The link was copied to clipboard successfully!");
     });
+    registerCommand("playLikedSongs", async () => {
+        const resp = await utils_1.spotifyApi.getMe();
+        await handleCommand({
+            handlerId: "playPlaylist",
+            payload: `${resp.body.uri}:collection`,
+        });
+        (0, utils_1.showInformationMessage)("Playing liked songs");
+    });
     registerCommand("removeFromLikedSongs", async () => {
         const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
         if (!resp.body.item) {

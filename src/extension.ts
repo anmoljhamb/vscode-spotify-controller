@@ -266,6 +266,15 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
+    registerCommand("playLikedSongs", async () => {
+        const resp = await spotifyApi.getMe();
+        await handleCommand({
+            handlerId: "playPlaylist",
+            payload: `${resp.body.uri}:collection`,
+        });
+        showInformationMessage("Playing liked songs");
+    });
+
     registerCommand("removeFromLikedSongs", async () => {
         const resp = await spotifyApi.getMyCurrentPlayingTrack();
         if (!resp.body.item) {
