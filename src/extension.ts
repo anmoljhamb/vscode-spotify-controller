@@ -7,7 +7,6 @@ import {
     getLoggedInState,
     getPlayingStatus,
     handleError,
-    protectedCommand,
     refreshToken,
     setAccessToken,
     setLoggedInState,
@@ -359,6 +358,12 @@ export async function activate(context: vscode.ExtensionContext) {
         handlerId: string;
         payload?: any;
     }) {
+        if (!(await getLoggedInState()) as boolean) {
+            vscode.window.showWarningMessage(
+                "You're not logged in. Please Login."
+            );
+            return;
+        }
         spotifyApi.setAccessToken((await getAccessToken()) as string);
         switch (handlerId) {
             case "nextSong":

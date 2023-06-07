@@ -1,22 +1,11 @@
 import axios from "axios";
-import * as vscode from "vscode";
 import { BACKEND_URI } from "../constants";
 import {
-    getLoggedInState,
     getRefreshToken,
     setAccessToken,
     setLoggedInState,
     setRefreshToken,
 } from "./tokenManager";
-
-export const protectedCommand = async (callback: () => void) => {
-    if (await getLoggedInState()) return callback;
-    return () => {
-        vscode.window.showWarningMessage(
-            "You are currently not logged in. You need to login."
-        );
-    };
-};
 
 export const refreshToken = async () => {
     let _refreshToken = (await getRefreshToken()) as string;

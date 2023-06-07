@@ -298,6 +298,10 @@ async function activate(context) {
         });
     }
     async function handleCommand({ handlerId, payload, }) {
+        if (!(await (0, utils_1.getLoggedInState)())) {
+            vscode.window.showWarningMessage("You're not logged in. Please Login.");
+            return;
+        }
         utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
         switch (handlerId) {
             case "nextSong":
