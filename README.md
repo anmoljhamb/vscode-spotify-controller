@@ -1,6 +1,6 @@
 # spotify-controller README
 
-This is the README for your extension "spotify-controller". After writing up a brief description, we recommend including the following sections.
+The VSCode Spotify Extension is a handy extension for Visual Studio Code that allows you to control Spotify directly from your editor. Play, pause, skip, adjust volume, and search for music without leaving your coding environment.
 
 ## Features
 
