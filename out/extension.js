@@ -50,7 +50,7 @@ async function activate(context) {
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", async () => {
         if ((await (0, utils_1.getLoggedInState)())) {
-            (0, utils_1.showLoginMessage)();
+            vscode.window.showWarningMessage("You're already logged in. Please log out to login again.");
             return;
         }
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
@@ -224,6 +224,19 @@ async function activate(context) {
         const url = resp.body.item.external_urls.spotify;
         await vscode.env.clipboard.writeText(url);
         (0, utils_1.showInformationMessage)("The link was copied to clipboard successfully!");
+    });
+    registerCommand("playTopSongs", async () => {
+        const resp = await utils_1.spotifyApi.getMyTopTracks();
+        const choice = await vscode.window.showQuickPick(resp.body.items.map((track) => track.name));
+        if (!choice)
+            return;
+        const chosenTrackUri = resp.body.items
+            .filter((track) => track.name === choice)
+            .at(0).uri;
+        await handleCommand({
+            handlerId: "playTrack",
+            payload: chosenTrackUri,
+        });
     });
     registerCommand("playLikedSongs", async () => {
         const resp = await utils_1.spotifyApi.getMe();

@@ -44,7 +44,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand("login", async () => {
         if ((await getLoggedInState()) as boolean) {
-            showLoginMessage();
+            vscode.window.showWarningMessage(
+                "You're already logged in. Please log out to login again."
+            );
             return;
         }
         vscode.window.showInformationMessage(
@@ -264,6 +266,21 @@ export async function activate(context: vscode.ExtensionContext) {
         showInformationMessage(
             "The link was copied to clipboard successfully!"
         );
+    });
+
+    registerCommand("playTopSongs", async () => {
+        const resp = await spotifyApi.getMyTopTracks();
+        const choice = await vscode.window.showQuickPick(
+            resp.body.items.map((track) => track.name)
+        );
+        if (!choice) return;
+        const chosenTrackUri = resp.body.items
+            .filter((track) => track.name === choice)
+            .at(0)!.uri;
+        await handleCommand({
+            handlerId: "playTrack",
+            payload: chosenTrackUri,
+        });
     });
 
     registerCommand("playLikedSongs", async () => {

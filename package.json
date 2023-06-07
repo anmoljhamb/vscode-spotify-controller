@@ -150,6 +150,11 @@
                 "title": "Play Playlist"
             },
             {
+                "command": "spotify-controller.playTopSongs",
+                "category": "SpotifyController",
+                "title": "Play Top Songs"
+            },
+            {
                 "command": "spotify-controller.playLikedSongs",
                 "category": "SpotifyController",
                 "title": "Play Liked Songs"
