@@ -44,7 +44,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     commands.forEach((command) => registerSpotifyCommand(command));
 
-    registerCommand("login", false, async () => {
+    registerCommand("login", async () => {
         if ((await getLoggedInState()) as boolean) {
             vscode.window.showWarningMessage(
                 "You are already logged in. Please log out to log in again."
@@ -57,7 +57,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.env.openExternal(vscode.Uri.parse(authUrl));
     });
 
-    registerCommand("logout", false, async () => {
+    registerCommand("logout", async () => {
         if (!((await getLoggedInState()) as boolean)) {
             vscode.window.showWarningMessage(
                 "You aren't logged in right now. Please Login."
@@ -73,7 +73,7 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
-    registerCommand("setVolume", true, async () => {
+    registerCommand("setVolume", async () => {
         const resp = await vscode.window.showInputBox({
             title: "Set Volume",
             prompt: "Enter a value between 0-100",
@@ -157,7 +157,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand(
         "playTrack",
-        true,
         playTrackTemplate({
             confirm: true,
             title: "Play track",
@@ -167,7 +166,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand(
         "playTrackWithoutConfirmation",
-        true,
         playTrackTemplate({
             title: "Play Track Without Confirmation",
             handlerId: "playTrackWithoutConfirmation",
@@ -177,7 +175,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand(
         "playTrackWithoutContext",
-        true,
         playTrackTemplate({
             title: "Play Track Without Context",
             handlerId: "playTrackWithoutContext",
@@ -187,7 +184,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand(
         "playTrackWithoutContextWithoutConfirmation",
-        true,
         playTrackTemplate({
             title: "Play Track Without Context",
             handlerId: "playTrackWithoutContextWithoutConfirmation",
@@ -197,7 +193,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand(
         "addToQueue",
-        true,
         playTrackTemplate({
             title: "Add Track To Queue",
             handlerId: "addToQueue",
@@ -207,7 +202,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     registerCommand(
         "addToQueueWithoutConfirmation",
-        true,
         playTrackTemplate({
             title: "Add Track To Queue",
             handlerId: "addToQueueWithoutConfirmation",
@@ -215,7 +209,7 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    registerCommand("removeFromLikedSongs", true, async () => {
+    registerCommand("removeFromLikedSongs", async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
             if (!resp.body.item) {
@@ -234,7 +228,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    registerCommand("addToLikedSongs", true, async () => {
+    registerCommand("addToLikedSongs", async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
             if (!resp.body.item) {
@@ -251,7 +245,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    registerCommand("seek", true, async () => {
+    registerCommand("seek", async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
             if (!resp.body.item)
@@ -289,7 +283,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    registerCommand("switchDevice", true, async () => {
+    registerCommand("switchDevice", async () => {
         const resp = await spotifyApi.getMyDevices();
         let activeDevice = "";
         const options = resp.body.devices.filter((device) => {
@@ -324,7 +318,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    registerCommand("playPause", true, async () => {
+    registerCommand("playPause", async () => {
         try {
             const isPlaying = await getPlayingStatus();
             vscode.commands.executeCommand(
@@ -335,16 +329,9 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    async function registerCommand(
-        commandId: string,
-        authRequired: boolean,
-        func: () => void
-    ) {
+    async function registerCommand(commandId: string, func: () => void) {
         context.subscriptions.push(
-            vscode.commands.registerCommand(
-                `${appId}.${commandId}`,
-                authRequired ? await protectedCommand(func) : func
-            )
+            vscode.commands.registerCommand(`${appId}.${commandId}`, func)
         );
     }
 
@@ -354,7 +341,7 @@ export async function activate(context: vscode.ExtensionContext) {
         handlerId,
         payload,
     }: RegisterSpotifyCommand) {
-        await registerCommand(commandId, true, async () => {
+        await registerCommand(commandId, async () => {
             try {
                 if (!handlerId) handlerId = commandId;
                 await handleCommand({ handlerId, payload });

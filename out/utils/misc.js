@@ -27,8 +27,13 @@ exports.showInformationMessage = exports.handleError = void 0;
 const vscode = __importStar(require("vscode"));
 const constants_1 = require("../constants");
 const handleError = (e) => {
-    if (e instanceof Error)
-        vscode.window.showErrorMessage(e.message);
+    if (e instanceof Error) {
+        if (e.name === "WebapiRegularError") {
+            vscode.window.showWarningMessage("You are not logged in. Please login.");
+        }
+        else
+            vscode.window.showErrorMessage(e.message);
+    }
     console.error(e);
 };
 exports.handleError = handleError;
