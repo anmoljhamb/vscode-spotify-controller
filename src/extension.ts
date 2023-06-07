@@ -192,6 +192,28 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    registerCommand("playArtist", async () => {
+        let choice = await vscode.window.showInputBox({
+            title: "Play an artist",
+            prompt: "Enter the artist you'd like to listen to",
+        });
+        if (!choice) return;
+        const artists = (await spotifyApi.searchArtists(choice)).body.artists;
+        if (!artists) throw new Error("No artist found");
+        choice = await vscode.window.showQuickPick(
+            artists.items.map((artist) => artist.name)
+        );
+        if (!choice) return;
+        const chosenArtist = artists.items
+            .filter((artist) => artist.name === choice)
+            .at(0);
+        if (!chosenArtist) return;
+        await handleCommand({
+            handlerId: "playArtist",
+            payload: chosenArtist.uri
+        })
+    });
+
     registerCommand("playPlaylist", async () => {
         const limit = 50;
         let playlists = (
@@ -412,6 +434,7 @@ export async function activate(context: vscode.ExtensionContext) {
             case "playTrackWithoutContext":
             case "playTrackWithoutContextWithoutConfirmation":
                 return await spotifyApi.play({ uris: [payload] });
+            case "playArtist":
             case "playPlaylist":
                 return await spotifyApi.play({
                     context_uri: payload,

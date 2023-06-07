@@ -160,6 +160,29 @@ async function activate(context) {
         handlerId: "addToQueueWithoutConfirmation",
         confirm: false,
     }));
+    registerCommand("playArtist", async () => {
+        let choice = await vscode.window.showInputBox({
+            title: "Play an artist",
+            prompt: "Enter the artist you'd like to listen to",
+        });
+        if (!choice)
+            return;
+        const artists = (await utils_1.spotifyApi.searchArtists(choice)).body.artists;
+        if (!artists)
+            throw new Error("No artist found");
+        choice = await vscode.window.showQuickPick(artists.items.map((artist) => artist.name));
+        if (!choice)
+            return;
+        const chosenArtist = artists.items
+            .filter((artist) => artist.name === choice)
+            .at(0);
+        if (!chosenArtist)
+            return;
+        await handleCommand({
+            handlerId: "playArtist",
+            payload: chosenArtist.uri
+        });
+    });
     registerCommand("playPlaylist", async () => {
         const limit = 50;
         let playlists = (await utils_1.spotifyApi.getUserPlaylists({
@@ -341,6 +364,7 @@ async function activate(context) {
             case "playTrackWithoutContext":
             case "playTrackWithoutContextWithoutConfirmation":
                 return await utils_1.spotifyApi.play({ uris: [payload] });
+            case "playArtist":
             case "playPlaylist":
                 return await utils_1.spotifyApi.play({
                     context_uri: payload,
