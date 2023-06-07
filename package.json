@@ -135,6 +135,11 @@
                 "title": "Remove current song from Liked Songs"
             },
             {
+                "command": "spotify-controller.playPlaylist",
+                "category": "SpotifyController",
+                "title": "Play Playlist"
+            },
+            {
                 "command": "spotify-controller.addToLikedSongs",
                 "category": "SpotifyController",
                 "title": "Add current song to Liked Songs"

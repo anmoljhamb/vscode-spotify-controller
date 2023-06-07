@@ -208,6 +208,52 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    registerCommand("playPlaylist", async () => {
+        try {
+            const limit = 50;
+            let playlists = (
+                await spotifyApi.getUserPlaylists({
+                    limit,
+                })
+            ).body.items;
+            let offset = 50;
+            while (true) {
+                const temp = (
+                    await spotifyApi.getUserPlaylists({
+                        limit: 50,
+                        offset,
+                    })
+                ).body.items;
+                playlists = [...playlists, ...temp];
+                if (temp.length < limit) {
+                    break;
+                }
+                offset += 50;
+            }
+            const choice = await vscode.window.showQuickPick(
+                playlists.map((playlist) => playlist.name),
+                {
+                    title: "Play Playlist",
+                }
+            );
+            if (!choice || choice.length === 0) return;
+            console.log(choice);
+            const chosenTrack = playlists
+                .filter((playlist) => playlist.name === choice)
+                .at(0);
+            if (!chosenTrack) return;
+            handleCommand({
+                handlerId: "playPlaylist",
+                payload: chosenTrack.uri,
+            });
+            showInformationMessage(
+                `The playlist ${choice} was played successfully!`
+            );
+        } catch (e) {
+            handleError(e);
+        }
+    });
+
     registerCommand("removeFromLikedSongs", async () => {
         try {
             const resp = await spotifyApi.getMyCurrentPlayingTrack();
@@ -398,6 +444,10 @@ export async function activate(context: vscode.ExtensionContext) {
             case "playTrackWithoutContext":
             case "playTrackWithoutContextWithoutConfirmation":
                 return await spotifyApi.play({ uris: [payload] });
+            case "playPlaylist":
+                return await spotifyApi.play({
+                    context_uri: payload,
+                });
             default:
                 vscode.window.showWarningMessage(
                     "The given command was not found."

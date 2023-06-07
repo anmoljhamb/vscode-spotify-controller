@@ -171,6 +171,45 @@ async function activate(context) {
         handlerId: "addToQueueWithoutConfirmation",
         confirm: false,
     }));
+    registerCommand("playPlaylist", async () => {
+        try {
+            const limit = 50;
+            let playlists = (await utils_1.spotifyApi.getUserPlaylists({
+                limit,
+            })).body.items;
+            let offset = 50;
+            while (true) {
+                const temp = (await utils_1.spotifyApi.getUserPlaylists({
+                    limit: 50,
+                    offset,
+                })).body.items;
+                playlists = [...playlists, ...temp];
+                if (temp.length < limit) {
+                    break;
+                }
+                offset += 50;
+            }
+            const choice = await vscode.window.showQuickPick(playlists.map((playlist) => playlist.name), {
+                title: "Play Playlist",
+            });
+            if (!choice || choice.length === 0)
+                return;
+            console.log(choice);
+            const chosenTrack = playlists
+                .filter((playlist) => playlist.name === choice)
+                .at(0);
+            if (!chosenTrack)
+                return;
+            handleCommand({
+                handlerId: "playPlaylist",
+                payload: chosenTrack.uri,
+            });
+            (0, utils_1.showInformationMessage)(`The playlist ${choice} was played successfully!`);
+        }
+        catch (e) {
+            (0, utils_1.handleError)(e);
+        }
+    });
     registerCommand("removeFromLikedSongs", async () => {
         try {
             const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
@@ -336,6 +375,10 @@ async function activate(context) {
             case "playTrackWithoutContext":
             case "playTrackWithoutContextWithoutConfirmation":
                 return await utils_1.spotifyApi.play({ uris: [payload] });
+            case "playPlaylist":
+                return await utils_1.spotifyApi.play({
+                    context_uri: payload,
+                });
             default:
                 vscode.window.showWarningMessage("The given command was not found.");
                 return;
