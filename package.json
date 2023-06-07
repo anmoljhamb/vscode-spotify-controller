@@ -115,6 +115,11 @@
                 "title": "Play Track Without Confirmation"
             },
             {
+                "command": "spotify-controller.playArtist",
+                "category": "SpotifyController",
+                "title": "Play Artist"
+            },
+            {
                 "command": "spotify-controller.switchDevice",
                 "category": "SpotifyController",
                 "title": "Switch Device"

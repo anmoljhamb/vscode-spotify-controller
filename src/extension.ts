@@ -87,15 +87,11 @@ export async function activate(context: vscode.ExtensionContext) {
             },
         });
         if (!resp || resp.length === 0) return;
-        try {
-            await handleCommand({
-                handlerId: "setVolume",
-                payload: resp,
-            });
-            showInformationMessage("Volume set successfully!");
-        } catch (e) {
-            handleError(e);
-        }
+        await handleCommand({
+            handlerId: "setVolume",
+            payload: resp,
+        });
+        showInformationMessage("Volume set successfully!");
     });
 
     const playTrackTemplate = ({
@@ -108,49 +104,42 @@ export async function activate(context: vscode.ExtensionContext) {
         confirm: boolean;
     }) => {
         return async () => {
-            try {
-                const resp = await vscode.window.showInputBox({
-                    title,
-                    prompt: "Enter the song you want to play.",
-                });
-                if (!resp) return;
-                const tracks = (await spotifyApi.searchTracks(resp)).body
-                    .tracks;
-                if (tracks === undefined || tracks.items.length === 0)
-                    throw new Error("No results found");
-                const _temp = tracks.items[0];
-                const getName = (item: typeof _temp) => {
-                    const artists = item.artists.map((artist) => artist.name);
-                    return `${item.name} By ${artists.join(", ")}`;
-                };
-                const songs = tracks.items.slice(0, 5);
-                let chosenTrackUri: string;
-                if (confirm) {
-                    const choice = await vscode.window.showQuickPick(
-                        songs.map((song) => getName(song)),
-                        {
-                            title,
-                            placeHolder: "Pick which song you'd like to play",
-                        }
-                    );
-                    if (!choice) return;
-                    const chosenTrack = songs
-                        .filter((song) => getName(song) === choice)
-                        .at(0)!;
-                    chosenTrackUri = chosenTrack.uri;
-                } else {
-                    chosenTrackUri = songs.at(0)?.uri as string;
-                }
-                await handleCommand({
-                    handlerId,
-                    payload: chosenTrackUri,
-                });
-                showInformationMessage(
-                    "The action was completed successfully!"
+            const resp = await vscode.window.showInputBox({
+                title,
+                prompt: "Enter the song you want to play.",
+            });
+            if (!resp) return;
+            const tracks = (await spotifyApi.searchTracks(resp)).body.tracks;
+            if (tracks === undefined || tracks.items.length === 0)
+                throw new Error("No results found");
+            const _temp = tracks.items[0];
+            const getName = (item: typeof _temp) => {
+                const artists = item.artists.map((artist) => artist.name);
+                return `${item.name} By ${artists.join(", ")}`;
+            };
+            const songs = tracks.items.slice(0, 5);
+            let chosenTrackUri: string;
+            if (confirm) {
+                const choice = await vscode.window.showQuickPick(
+                    songs.map((song) => getName(song)),
+                    {
+                        title,
+                        placeHolder: "Pick which song you'd like to play",
+                    }
                 );
-            } catch (e) {
-                handleError(e);
+                if (!choice) return;
+                const chosenTrack = songs
+                    .filter((song) => getName(song) === choice)
+                    .at(0)!;
+                chosenTrackUri = chosenTrack.uri;
+            } else {
+                chosenTrackUri = songs.at(0)?.uri as string;
             }
+            await handleCommand({
+                handlerId,
+                payload: chosenTrackUri,
+            });
+            showInformationMessage("The action was completed successfully!");
         };
     };
 
@@ -209,123 +198,105 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     registerCommand("playPlaylist", async () => {
-        try {
-            const limit = 50;
-            let playlists = (
+        const limit = 50;
+        let playlists = (
+            await spotifyApi.getUserPlaylists({
+                limit,
+            })
+        ).body.items;
+        let offset = 50;
+        while (true) {
+            const temp = (
                 await spotifyApi.getUserPlaylists({
-                    limit,
+                    limit: 50,
+                    offset,
                 })
             ).body.items;
-            let offset = 50;
-            while (true) {
-                const temp = (
-                    await spotifyApi.getUserPlaylists({
-                        limit: 50,
-                        offset,
-                    })
-                ).body.items;
-                playlists = [...playlists, ...temp];
-                if (temp.length < limit) {
-                    break;
-                }
-                offset += 50;
+            playlists = [...playlists, ...temp];
+            if (temp.length < limit) {
+                break;
             }
-            const choice = await vscode.window.showQuickPick(
-                playlists.map((playlist) => playlist.name),
-                {
-                    title: "Play Playlist",
-                }
-            );
-            if (!choice || choice.length === 0) return;
-            console.log(choice);
-            const chosenTrack = playlists
-                .filter((playlist) => playlist.name === choice)
-                .at(0);
-            if (!chosenTrack) return;
-            handleCommand({
-                handlerId: "playPlaylist",
-                payload: chosenTrack.uri,
-            });
-            showInformationMessage(
-                `The playlist ${choice} was played successfully!`
-            );
-        } catch (e) {
-            handleError(e);
+            offset += 50;
         }
+        const choice = await vscode.window.showQuickPick(
+            playlists.map((playlist) => playlist.name),
+            {
+                title: "Play Playlist",
+            }
+        );
+        if (!choice || choice.length === 0) return;
+        console.log(choice);
+        const chosenTrack = playlists
+            .filter((playlist) => playlist.name === choice)
+            .at(0);
+        if (!chosenTrack) return;
+        handleCommand({
+            handlerId: "playPlaylist",
+            payload: chosenTrack.uri,
+        });
+        showInformationMessage(
+            `The playlist ${choice} was played successfully!`
+        );
     });
 
     registerCommand("removeFromLikedSongs", async () => {
-        try {
-            const resp = await spotifyApi.getMyCurrentPlayingTrack();
-            if (!resp.body.item) {
-                throw new Error("Currently not playing anything");
-            }
-            const trackId = resp.body.item.id;
-            await handleCommand({
-                handlerId: "removeFromLikedSongs",
-                payload: trackId,
-            });
-            showInformationMessage(
-                "The song was removed from your liked songs."
-            );
-        } catch (e) {
-            handleError(e);
+        const resp = await spotifyApi.getMyCurrentPlayingTrack();
+        if (!resp.body.item) {
+            throw new Error("Currently not playing anything");
         }
+        const trackId = resp.body.item.id;
+        await handleCommand({
+            handlerId: "removeFromLikedSongs",
+            payload: trackId,
+        });
+        showInformationMessage("The song was removed from your liked songs.");
     });
 
     registerCommand("addToLikedSongs", async () => {
-        try {
-            const resp = await spotifyApi.getMyCurrentPlayingTrack();
-            if (!resp.body.item) {
-                throw new Error("Currently not playing anything");
-            }
-            const trackId = resp.body.item.id;
-            await handleCommand({
-                handlerId: "addToLikedSongs",
-                payload: trackId,
-            });
-            showInformationMessage("The song was added to your liked songs.");
-        } catch (e) {
-            handleError(e);
+        const resp = await spotifyApi.getMyCurrentPlayingTrack();
+        if (!resp.body.item) {
+            throw new Error("Currently not playing anything");
         }
+        const trackId = resp.body.item.id;
+        await handleCommand({
+            handlerId: "addToLikedSongs",
+            payload: trackId,
+        });
+        showInformationMessage("The song was added to your liked songs.");
     });
 
     registerCommand("seek", async () => {
-        try {
-            const resp = await spotifyApi.getMyCurrentPlayingTrack();
-            if (!resp.body.item)
-                throw new Error("No currently playing track found");
-            const duration_ms = resp.body.item.duration_ms;
-            const duration = Math.round(duration_ms / 1000);
-            const seekTo = await vscode.window.showInputBox({
-                title: "Seek",
-                prompt: `Seek to the given second of currently playing track`,
-                placeHolder: `Enter a value between 0 and ${duration - 1}`,
-                validateInput(value) {
-                    try {
-                        let temp = Number.parseInt(value);
-                        if (temp < 0 || temp > duration) {
-                            throw new Error("Not in the range");
-                        }
-                        return null;
-                    } catch (e) {
-                        return `The value needs to be in the range [0, ${
-                            duration - 1
-                        }]`;
+        const resp = await spotifyApi.getMyCurrentPlayingTrack();
+        if (!resp.body.item)
+            throw new Error("No currently playing track found");
+        const duration_ms = resp.body.item.duration_ms;
+        const duration = Math.round(duration_ms / 1000);
+        const seekTo = await vscode.window.showInputBox({
+            title: "Seek",
+            prompt: `Seek to the given second of currently playing track`,
+            placeHolder: `Enter a value between 0 and ${duration - 1}`,
+            validateInput(value) {
+                try {
+                    let temp = Number.parseInt(value);
+                    if (temp < 0 || temp > duration) {
+                        throw new Error("Not in the range");
                     }
-                },
-            });
-            if (!seekTo) return;
-            await handleCommand({
-                handlerId: "seek",
-                payload: Number.parseInt(seekTo) * 1000,
-            });
-            showInformationMessage(
-                "The song was seeked to the given position successfully!"
-            );
-        } catch (e) {
-            handleError(e);
-        }
+                    return null;
+                } catch (e) {
+                    return `The value needs to be in the range [0, ${
+                        duration - 1
+                    }]`;
+                }
+            },
+        });
+        if (!seekTo) return;
+        await handleCommand({
+            handlerId: "seek",
+            payload: Number.parseInt(seekTo) * 1000,
+        });
+        showInformationMessage(
+            "The song was seeked to the given position successfully!"
+        );
     });
 
     registerCommand("switchDevice", async () => {
@@ -352,31 +323,35 @@ export async function activate(context: vscode.ExtensionContext) {
         );
         if (!choice) return;
         const device = options.filter((val) => val.name === choice).at(0)!;
-        try {
-            handleCommand({
-                handlerId: "switchDevice",
-                payload: [device.id as string],
-            });
-            showInformationMessage("The device was switched successfully!");
-        } catch (e) {
-            handleError(e);
-        }
+        handleCommand({
+            handlerId: "switchDevice",
+            payload: [device.id as string],
+        });
+        showInformationMessage("The device was switched successfully!");
     });
 
     registerCommand("playPause", async () => {
-        try {
-            const isPlaying = await getPlayingStatus();
-            vscode.commands.executeCommand(
-                `${appId}.${isPlaying ? "pause" : "play"}`
-            );
-        } catch (e) {
-            handleError(e);
-        }
+        const isPlaying = await getPlayingStatus();
+        vscode.commands.executeCommand(
+            `${appId}.${isPlaying ? "pause" : "play"}`
+        );
     });
 
-    async function registerCommand(commandId: string, func: () => void) {
+    async function registerCommand(
+        commandId: string,
+        func: () => Promise<void>
+    ) {
         context.subscriptions.push(
-            vscode.commands.registerCommand(`${appId}.${commandId}`, func)
+            vscode.commands.registerCommand(
+                `${appId}.${commandId}`,
+                async () => {
+                    try {
+                        await func();
+                    } catch (e) {
+                        handleError(e);
+                    }
+                }
+            )
         );
     }
 
