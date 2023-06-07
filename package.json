@@ -112,7 +112,7 @@
             {
                 "command": "spotify-controller.playTrackWithoutContextWithoutConfirmation",
                 "category": "SpotifyController",
-                "title": "Play Track and Confirmation"
+                "title": "Play Track Without Confirmation"
             },
             {
                 "command": "spotify-controller.switchDevice",
