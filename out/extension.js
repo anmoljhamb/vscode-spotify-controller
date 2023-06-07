@@ -38,18 +38,18 @@ async function activate(context) {
     try {
         await utils_1.spotifyApi.getMe();
         console.log("spotifyApi.getMe was successful!");
-        (0, utils_1.updateIsLoggedIn)(true);
+        await (0, utils_1.setLoggedInState)(true);
         (0, utils_1.setRefreshInterval)();
     }
     catch (e) {
         vscode.window.showWarningMessage("Spotify Controller Not Logged In. Please Login");
         console.log("Error while gettingMe");
-        (0, utils_1.updateIsLoggedIn)(false);
+        await (0, utils_1.setLoggedInState)(false);
         console.error(e);
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
-    registerCommand("login", false, () => {
-        if ((0, utils_1.getLoggedIn)()) {
+    registerCommand("login", false, async () => {
+        if ((await (0, utils_1.getLoggedInState)())) {
             vscode.window.showWarningMessage("You are already logged in. Please log out to log in again.");
             return;
         }
@@ -57,13 +57,13 @@ async function activate(context) {
         vscode.env.openExternal(vscode.Uri.parse(utils_1.authUrl));
     });
     registerCommand("logout", false, async () => {
-        if (!(0, utils_1.getLoggedIn)()) {
+        if (!(await (0, utils_1.getLoggedInState)())) {
             vscode.window.showWarningMessage("You aren't logged in right now. Please Login.");
         }
         await (0, utils_1.setAccessToken)("");
         await (0, utils_1.setRefreshToken)("");
         console.log("logging out");
-        (0, utils_1.updateIsLoggedIn)(false);
+        await (0, utils_1.setLoggedInState)(false);
         utils_1.spotifyApi.setAccessToken("");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
@@ -281,11 +281,11 @@ async function activate(context) {
             (0, utils_1.handleError)(e);
         }
     });
-    function registerCommand(commandId, authRequired, func) {
-        context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, authRequired ? (0, utils_1.protectedCommand)(func) : func));
+    async function registerCommand(commandId, authRequired, func) {
+        context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, authRequired ? await (0, utils_1.protectedCommand)(func) : func));
     }
-    function registerSpotifyCommand({ commandId, successMsg, handlerId, payload, }) {
-        registerCommand(commandId, true, async () => {
+    async function registerSpotifyCommand({ commandId, successMsg, handlerId, payload, }) {
+        await registerCommand(commandId, true, async () => {
             try {
                 if (!handlerId)
                     handlerId = commandId;

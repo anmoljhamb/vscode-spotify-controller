@@ -52,8 +52,8 @@ exports.app.get("/auth/callback", async (req, res, next) => {
         utils_1.spotifyApi.setAccessToken(access_token);
         await (0, utils_1.setAccessToken)(access_token);
         await (0, utils_1.setRefreshToken)(refresh_token);
+        await (0, utils_1.setLoggedInState)(true);
         (0, utils_1.setRefreshInterval)();
-        (0, utils_1.updateIsLoggedIn)(true);
         vscode.window.showInformationMessage("The user was logged in successfully!");
         return res.send("You were authenticated successfully! You can close this window now.");
     }

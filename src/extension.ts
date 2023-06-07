@@ -335,7 +335,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    function registerCommand(
+    async function registerCommand(
         commandId: string,
         authRequired: boolean,
         func: () => void
@@ -343,18 +343,18 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(
             vscode.commands.registerCommand(
                 `${appId}.${commandId}`,
-                authRequired ? protectedCommand(func) : func
+                authRequired ? await protectedCommand(func) : func
             )
         );
     }
 
-    function registerSpotifyCommand({
+    async function registerSpotifyCommand({
         commandId,
         successMsg,
         handlerId,
         payload,
     }: RegisterSpotifyCommand) {
-        registerCommand(commandId, true, async () => {
+        await registerCommand(commandId, true, async () => {
             try {
                 if (!handlerId) handlerId = commandId;
                 await handleCommand({ handlerId, payload });
