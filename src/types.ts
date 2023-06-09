@@ -11,3 +11,9 @@ interface RegisterSpotifyCommand {
     payload?: any;
     protectedCommand?: boolean;
 }
+
+interface RegisterCommand {
+    protectedCommand?: boolean;
+    func(): Promise<void>;
+    commandId: string;
+}
