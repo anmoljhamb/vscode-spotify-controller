@@ -405,6 +405,7 @@ async function activate(context) {
                     console.log(`currentlyLoggedIn?: ${await (0, utils_1.isCurrentlyLoggedIn)()}`);
                     if (!(await (0, utils_1.isCurrentlyLoggedIn)()))
                         throw new Error("userNotLoggedIn");
+                    utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
                 }
                 await func();
             }

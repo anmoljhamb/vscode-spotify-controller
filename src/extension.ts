@@ -460,6 +460,9 @@ export async function activate(context: vscode.ExtensionContext) {
                             );
                             if (!(await isCurrentlyLoggedIn()))
                                 throw new Error("userNotLoggedIn");
+                            spotifyApi.setAccessToken(
+                                (await getAccessToken()) as string
+                            );
                         }
                         await func();
                     } catch (e) {
