@@ -51,6 +51,7 @@ async function activate(context) {
         }
         else {
             await (0, utils_1.refreshToken)();
+            (0, utils_1.setRefreshInterval)();
         }
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
@@ -72,6 +73,7 @@ async function activate(context) {
             await (0, utils_1.setAccessToken)("");
             await (0, utils_1.setRefreshToken)("");
             await (0, utils_1.setLoggedInState)(false);
+            (0, utils_1.clearRefreshInterval)();
             utils_1.spotifyApi.setAccessToken("");
             console.log("logging out");
             vscode.window.showInformationMessage("Spotify account was successfully logged out");
@@ -483,6 +485,7 @@ async function activate(context) {
 }
 exports.activate = activate;
 function deactivate() {
+    (0, utils_1.clearRefreshInterval)();
     server.close(() => {
         console.log(`Stopped listening on the url *:${constants_1.PORT}`);
     });

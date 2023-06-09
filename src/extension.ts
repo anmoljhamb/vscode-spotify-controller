@@ -3,6 +3,7 @@ import { PORT, appId, commands } from "./constants";
 import { app } from "./server";
 import {
     authUrl,
+    clearRefreshInterval,
     getAccessToken,
     getLoggedInState,
     getPlayingStatus,
@@ -43,6 +44,7 @@ export async function activate(context: vscode.ExtensionContext) {
             showLoginMessage();
         } else {
             await refreshToken();
+            setRefreshInterval();
         }
     }
 
@@ -71,6 +73,7 @@ export async function activate(context: vscode.ExtensionContext) {
             await setAccessToken("");
             await setRefreshToken("");
             await setLoggedInState(false);
+            clearRefreshInterval();
             spotifyApi.setAccessToken("");
             console.log("logging out");
             vscode.window.showInformationMessage(
@@ -552,6 +555,7 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
+    clearRefreshInterval();
     server.close(() => {
         console.log(`Stopped listening on the url *:${PORT}`);
     });
