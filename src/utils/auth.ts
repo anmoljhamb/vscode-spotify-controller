@@ -2,12 +2,12 @@ import axios from "axios";
 import * as vscode from "vscode";
 import { BACKEND_URI, appId } from "../constants";
 import {
+    getAccessToken,
     getRefreshToken,
     setAccessToken,
     setLoggedInState,
     setRefreshToken,
 } from "./tokenManager";
-import { authUrl } from "./spotify";
 
 export const refreshToken = async () => {
     let _refreshToken = (await getRefreshToken()) as string;
@@ -23,6 +23,12 @@ export const refreshToken = async () => {
     } catch (e) {
         console.log("Error while refreshing");
         console.error(e);
+        vscode.window.showWarningMessage(
+            "There was an error while refreshing access token. Please login again"
+        );
+        await setAccessToken("");
+        await setRefreshToken("");
+        await setLoggedInState(false);
     }
 };
 
@@ -49,4 +55,12 @@ export const showLoginMessage = async () => {
     if (choice) {
         vscode.commands.executeCommand(`${appId}.login`);
     }
+};
+
+export const isCurrentlyLoggedIn = async () => {
+    const accessToken = (await getAccessToken()) as string;
+    const refreshToken = (await getRefreshToken()) as string;
+    if (!accessToken || accessToken.length === 0) return false;
+    if (!refreshToken || refreshToken.length === 0) return false;
+    return true;
 };

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showLoginMessage = exports.clearRefreshInterval = exports.setRefreshInterval = exports.refreshInterval = exports.intervalTime = exports.refreshToken = void 0;
+exports.isCurrentlyLoggedIn = exports.showLoginMessage = exports.clearRefreshInterval = exports.setRefreshInterval = exports.refreshInterval = exports.intervalTime = exports.refreshToken = void 0;
 const axios_1 = __importDefault(require("axios"));
 const vscode = __importStar(require("vscode"));
 const constants_1 = require("../constants");
@@ -46,6 +46,10 @@ const refreshToken = async () => {
     catch (e) {
         console.log("Error while refreshing");
         console.error(e);
+        vscode.window.showWarningMessage("There was an error while refreshing access token. Please login again");
+        await (0, tokenManager_1.setAccessToken)("");
+        await (0, tokenManager_1.setRefreshToken)("");
+        await (0, tokenManager_1.setLoggedInState)(false);
     }
 };
 exports.refreshToken = refreshToken;
@@ -70,4 +74,14 @@ const showLoginMessage = async () => {
     }
 };
 exports.showLoginMessage = showLoginMessage;
+const isCurrentlyLoggedIn = async () => {
+    const accessToken = (await (0, tokenManager_1.getAccessToken)());
+    const refreshToken = (await (0, tokenManager_1.getRefreshToken)());
+    if (!accessToken || accessToken.length === 0)
+        return false;
+    if (!refreshToken || refreshToken.length === 0)
+        return false;
+    return true;
+};
+exports.isCurrentlyLoggedIn = isCurrentlyLoggedIn;
 //# sourceMappingURL=auth.js.map

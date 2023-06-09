@@ -33,23 +33,29 @@ const server = server_1.app.listen(constants_1.PORT, () => {
 });
 async function activate(context) {
     (0, utils_1.updateGlobalState)(context.globalState);
-    await (0, utils_1.refreshToken)();
-    utils_1.spotifyApi.setAccessToken((await (0, utils_1.getAccessToken)()));
-    try {
-        await utils_1.spotifyApi.getMe();
-        console.log("spotifyApi.getMe was successful!");
-        await (0, utils_1.setLoggedInState)(true);
-        (0, utils_1.setRefreshInterval)();
-    }
-    catch (e) {
+    /**
+     * check last logged in status from the global state.
+     * if the user wasn't previously logged in, then there's no point for the refreshToken function
+     * if the user was previously logged in, we need to refresh the token.
+     * whenever there was a previously logged in user, we don't need to check for a refresh token
+     * after we've got the access token from the backend, we can then, check for spotify.getMe() although, it would be a bit redundant to check for it, if we've got the access token, already.
+     * for the getLoggedInState, what we should do is, check if we have an access token or not, if we don't, we shouldn't even send a request to the spotifyApi.
+     */
+    const previousLoggedInState = (await (0, utils_1.getLoggedInState)());
+    if (!previousLoggedInState) {
         (0, utils_1.showLoginMessage)();
-        console.log("Error while gettingMe");
-        await (0, utils_1.setLoggedInState)(false);
-        console.error(e);
+    }
+    else {
+        if (!(await (0, utils_1.isCurrentlyLoggedIn)())) {
+            (0, utils_1.showLoginMessage)();
+        }
+        else {
+            await (0, utils_1.refreshToken)();
+        }
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
     registerCommand("login", async () => {
-        if ((await (0, utils_1.getLoggedInState)())) {
+        if (await (0, utils_1.isCurrentlyLoggedIn)()) {
             vscode.window.showWarningMessage("You're already logged in. Please log out to login again.");
             return;
         }
@@ -57,14 +63,15 @@ async function activate(context) {
         vscode.env.openExternal(vscode.Uri.parse(utils_1.authUrl));
     });
     registerCommand("logout", async () => {
-        if (!(await (0, utils_1.getLoggedInState)())) {
+        if (!(await (0, utils_1.isCurrentlyLoggedIn)())) {
             (0, utils_1.showLoginMessage)();
+            return;
         }
         await (0, utils_1.setAccessToken)("");
         await (0, utils_1.setRefreshToken)("");
-        console.log("logging out");
         await (0, utils_1.setLoggedInState)(false);
         utils_1.spotifyApi.setAccessToken("");
+        console.log("logging out");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
     registerCommand("setVolume", async () => {
