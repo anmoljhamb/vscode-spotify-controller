@@ -4,7 +4,7 @@ import { showLoginMessage } from "./auth";
 
 export const handleError = (e: any) => {
     if (e instanceof Error) {
-        if (e.name === "WebapiRegularError") {
+        if (e.message === "userNotLoggedIn") {
             showLoginMessage();
         } else vscode.window.showErrorMessage(e.message);
     }

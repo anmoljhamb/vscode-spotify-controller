@@ -54,7 +54,7 @@ async function activate(context) {
         }
     }
     constants_1.commands.forEach((command) => registerSpotifyCommand(command));
-    registerCommand("login", async () => {
+    registerCommand("login", false, async () => {
         if (await (0, utils_1.isCurrentlyLoggedIn)()) {
             vscode.window.showWarningMessage("You're already logged in. Please log out to login again.");
             return;
@@ -62,11 +62,7 @@ async function activate(context) {
         vscode.window.showInformationMessage("Opening the login url. Please Authenticate.");
         vscode.env.openExternal(vscode.Uri.parse(utils_1.authUrl));
     });
-    registerCommand("logout", async () => {
-        if (!(await (0, utils_1.isCurrentlyLoggedIn)())) {
-            (0, utils_1.showLoginMessage)();
-            return;
-        }
+    registerCommand("logout", true, async () => {
         await (0, utils_1.setAccessToken)("");
         await (0, utils_1.setRefreshToken)("");
         await (0, utils_1.setLoggedInState)(false);
@@ -74,7 +70,7 @@ async function activate(context) {
         console.log("logging out");
         vscode.window.showInformationMessage("Spotify account was successfully logged out");
     });
-    registerCommand("setVolume", async () => {
+    registerCommand("setVolume", true, async () => {
         const resp = await vscode.window.showInputBox({
             title: "Set Volume",
             prompt: "Enter a value between 0-100",
@@ -137,37 +133,37 @@ async function activate(context) {
             (0, utils_1.showInformationMessage)("The action was completed successfully!");
         };
     };
-    registerCommand("playTrack", playTrackTemplate({
+    registerCommand("playTrack", true, playTrackTemplate({
         confirm: true,
         title: "Play track",
         handlerId: "playTrack",
     }));
-    registerCommand("playTrackWithoutConfirmation", playTrackTemplate({
+    registerCommand("playTrackWithoutConfirmation", true, playTrackTemplate({
         title: "Play Track Without Confirmation",
         handlerId: "playTrackWithoutConfirmation",
         confirm: false,
     }));
-    registerCommand("playTrackWithoutContext", playTrackTemplate({
+    registerCommand("playTrackWithoutContext", true, playTrackTemplate({
         title: "Play Track Without Context",
         handlerId: "playTrackWithoutContext",
         confirm: true,
     }));
-    registerCommand("playTrackWithoutContextWithoutConfirmation", playTrackTemplate({
+    registerCommand("playTrackWithoutContextWithoutConfirmation", true, playTrackTemplate({
         title: "Play Track Without Context",
         handlerId: "playTrackWithoutContextWithoutConfirmation",
         confirm: false,
     }));
-    registerCommand("addToQueue", playTrackTemplate({
+    registerCommand("addToQueue", true, playTrackTemplate({
         title: "Add Track To Queue",
         handlerId: "addToQueue",
         confirm: true,
     }));
-    registerCommand("addToQueueWithoutConfirmation", playTrackTemplate({
+    registerCommand("addToQueueWithoutConfirmation", true, playTrackTemplate({
         title: "Add Track To Queue",
         handlerId: "addToQueueWithoutConfirmation",
         confirm: false,
     }));
-    registerCommand("playArtist", async () => {
+    registerCommand("playArtist", true, async () => {
         let choice = await vscode.window.showInputBox({
             title: "Play an artist",
             prompt: "Enter the artist you'd like to listen to",
@@ -190,7 +186,7 @@ async function activate(context) {
             payload: chosenArtist.uri,
         });
     });
-    registerCommand("playPlaylist", async () => {
+    registerCommand("playPlaylist", true, async () => {
         const limit = 50;
         let playlists = (await utils_1.spotifyApi.getUserPlaylists({
             limit,
@@ -224,7 +220,7 @@ async function activate(context) {
         });
         (0, utils_1.showInformationMessage)(`The playlist ${choice} was played successfully!`);
     });
-    registerCommand("copyToClipboard", async () => {
+    registerCommand("copyToClipboard", true, async () => {
         const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
         if (!resp.body.item)
             throw new Error("Currently not playing anything");
@@ -232,7 +228,7 @@ async function activate(context) {
         await vscode.env.clipboard.writeText(url);
         (0, utils_1.showInformationMessage)("The link was copied to clipboard successfully!");
     });
-    registerCommand("playTopSongs", async () => {
+    registerCommand("playTopSongs", true, async () => {
         const resp = await utils_1.spotifyApi.getMyTopTracks();
         const choice = await vscode.window.showQuickPick(resp.body.items.map((track) => track.name));
         if (!choice)
@@ -245,7 +241,7 @@ async function activate(context) {
             payload: chosenTrackUri,
         });
     });
-    registerCommand("playLikedSongs", async () => {
+    registerCommand("playLikedSongs", true, async () => {
         const resp = await utils_1.spotifyApi.getMe();
         await handleCommand({
             handlerId: "playPlaylist",
@@ -253,7 +249,7 @@ async function activate(context) {
         });
         (0, utils_1.showInformationMessage)("Playing liked songs");
     });
-    registerCommand("removeFromLikedSongs", async () => {
+    registerCommand("removeFromLikedSongs", true, async () => {
         const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
         if (!resp.body.item) {
             throw new Error("Currently not playing anything");
@@ -265,7 +261,7 @@ async function activate(context) {
         });
         (0, utils_1.showInformationMessage)("The song was removed from your liked songs.");
     });
-    registerCommand("addToLikedSongs", async () => {
+    registerCommand("addToLikedSongs", true, async () => {
         const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
         if (!resp.body.item) {
             throw new Error("Currently not playing anything");
@@ -277,7 +273,7 @@ async function activate(context) {
         });
         (0, utils_1.showInformationMessage)("The song was added to your liked songs.");
     });
-    registerCommand("seek", async () => {
+    registerCommand("seek", true, async () => {
         const resp = await utils_1.spotifyApi.getMyCurrentPlayingTrack();
         if (!resp.body.item)
             throw new Error("No currently playing track found");
@@ -308,7 +304,7 @@ async function activate(context) {
         });
         (0, utils_1.showInformationMessage)("The song was seeked to the given position successfully!");
     });
-    registerCommand("switchDevice", async () => {
+    registerCommand("switchDevice", true, async () => {
         const resp = await utils_1.spotifyApi.getMyDevices();
         let activeDevice = "";
         const options = resp.body.devices.filter((device) => {
@@ -334,13 +330,19 @@ async function activate(context) {
         });
         (0, utils_1.showInformationMessage)("The device was switched successfully!");
     });
-    registerCommand("playPause", async () => {
+    registerCommand("playPause", true, async () => {
         const isPlaying = await (0, utils_1.getPlayingStatus)();
         vscode.commands.executeCommand(`${constants_1.appId}.${isPlaying ? "pause" : "play"}`);
     });
-    async function registerCommand(commandId, func) {
+    async function registerCommand(commandId, protectedCommand, func) {
         context.subscriptions.push(vscode.commands.registerCommand(`${constants_1.appId}.${commandId}`, async () => {
             try {
+                if (protectedCommand) {
+                    console.log(`protectedCommand: ${protectedCommand}`);
+                    console.log(`currentlyLoggedIn?: ${await (0, utils_1.isCurrentlyLoggedIn)()}`);
+                    if (!(await (0, utils_1.isCurrentlyLoggedIn)()))
+                        throw new Error("userNotLoggedIn");
+                }
                 await func();
             }
             catch (e) {
@@ -348,8 +350,11 @@ async function activate(context) {
             }
         }));
     }
-    async function registerSpotifyCommand({ commandId, successMsg, handlerId, payload, }) {
-        await registerCommand(commandId, async () => {
+    async function registerSpotifyCommand({ commandId, protectedCommand, successMsg, handlerId, payload, }) {
+        if (protectedCommand === undefined) {
+            protectedCommand = true;
+        }
+        await registerCommand(commandId, protectedCommand, async () => {
             try {
                 if (!handlerId)
                     handlerId = commandId;

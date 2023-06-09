@@ -9,4 +9,5 @@ interface RegisterSpotifyCommand {
     successMsg: string;
     handlerId?: string;
     payload?: any;
+    protectedCommand?: boolean;
 }

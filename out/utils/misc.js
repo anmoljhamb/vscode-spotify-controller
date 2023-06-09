@@ -29,7 +29,7 @@ const constants_1 = require("../constants");
 const auth_1 = require("./auth");
 const handleError = (e) => {
     if (e instanceof Error) {
-        if (e.name === "WebapiRegularError") {
+        if (e.message === "userNotLoggedIn") {
             (0, auth_1.showLoginMessage)();
         }
         else
