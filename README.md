@@ -79,4 +79,8 @@ If the above troubleshooting steps do not resolve your issue, please refer to th
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+-   **Issue: Access Token Expired after Extended Idle Period**: If you leave the instance of VSCode open and your device remains idle for an extended period, such as when it goes to sleep, the interval refresh the access token won't be called, leading to an error stating "Access Token Expired." To resolve this issue, one can simply restart their instance of VSCode, or simply logout and login again.
+
+-   **Issue: Limited Options to Play a Track**: Currently, the Spotify Web API offers only one option to play a track, which erases the current context. This means that if you use this option, any playlist or album you had playing will be cleared, and you will need to start it again. To mitigate this limitation, the extension provides an alternative option that adds the given song to the queue and skips to the next track, preserving the context. However, a bug arises if the user already has songs in the queue. In such cases, the extension will switch to the queued song instead of the intended track.
+
+If you encounter any other issues or have questions about the extension, please consider opening an issue on the GitHub repository for further assistance.
