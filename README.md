@@ -48,6 +48,30 @@ To learn more about the server part of the extension, you can visit the [VSCode 
 
 Feel free to explore the server repository for more details on how the access token refresh mechanism works and how it enables the extension to control Spotify playback within Visual Studio Code.
 
+## Installation (Pre-release Version)
+
+**Note: The extension is currently in development mode and not published on the VSCode Marketplace. Follow these steps to install the pre-release version:**
+
+1. Download the pre-release version [v0.0.2-beta](https://github.com/anmoljhamb/vscode-spotify-controller/releases/tag/v0.0.2-beta) from the release page.
+
+2. Save the downloaded file (`vscode-spotify-controller-0.0.2.vsix`) to a location you can easily access.
+
+3. Open Visual Studio Code.
+
+4. Go to the Extensions view by clicking on the square icon on the left sidebar or pressing `Ctrl+Shift+X` (Windows/Linux) or `Cmd+Shift+X` (macOS).
+
+5. Click on the ellipsis menu (three dots) located at the top-right corner and select "Install from VSIX..."
+
+6. Navigate to the downloaded file (`vscode-spotify-controller-0.0.2-beta.vsix`), select it, and click "Open".
+
+7. Wait for the extension to install. Once installed, you will see a prompt to reload Visual Studio Code. Click on the "Reload" button to activate the extension.
+
+That's it! You have successfully installed the pre-release version of the VSCode Spotify Extension. Please note that this version may contain bugs or incomplete features as it's still under development.
+
+If you encounter any issues or have feedback, please report them to the extension's [GitHub repository](https://github.com/anmoljhamb/vscode-spotify-controller).
+
+Thank you for your interest in beta testing the VSCode Spotify Controller Extension. Enjoy controlling Spotify directly from Visual Studio Code!
+
 ## Commands
 
 -   **Login**: `spotify-controller.login`
