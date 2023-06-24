@@ -2,6 +2,10 @@
 
 The VSCode Spotify Extension is a powerful tool that enhances your coding experience by bringing the control of Spotify directly to your Visual Studio Code editor. With this extension, you can seamlessly manage your Spotify playback, search for music, adjust volume, and more, all without leaving your coding environment.
 
+## Beta Testing
+
+The VSCode Spotify Extension is currently in development mode and available for beta testing. If you would like to test the extension, please contact me using any of the methods mentioned on my [GitHub profile](https://github.com/anmoljhamb). I will add you to the list of beta users, and you can start using the extension and provide valuable feedback.
+
 ## Features
 
 -   **Control Playback**: Play, pause, and skip tracks directly from Visual Studio Code. Stay in the coding flow while enjoying your favorite tunes.
