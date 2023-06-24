@@ -67,6 +67,16 @@ To modify the `spotifyControllerClientId` or `spotifyControllerShowInformationAl
 -   **Play Liked Songs**: `spotify-controller.playLikedSongs`
 -   **Add Current Song to Liked Songs**: `spotify-controller.addToLikedSongs`
 
+## Troubleshooting
+
+If you encounter any issues while using the VSCode Spotify Extension, you can try the following troubleshooting steps:
+
+-   **Error: NO_ACTIVE_DEVICE**: If you receive an error message with the code "NO_ACTIVE_DEVICE," ensure that there is an instance of Spotify open somewhere with your current account logged in. If you already have Spotify open and the error still persists, try playing a track in Spotify once. This should activate an active device and allow the extension to work as intended.
+
+-   **Error: Access Token Expired**: If you receive an error message indicating that the access token has expired, try logging out and logging back in to refresh the access token. This error may occur due to one of the known issues discussed in the "Known Issues" section of this documentation.
+
+If the above troubleshooting steps do not resolve your issue, please refer to the "Known Issues" section or consider opening an issue on the GitHub repository for further assistance.
+
 ## Known Issues
 
 Calling out known issues can help limit users opening duplicate issues against your extension.
