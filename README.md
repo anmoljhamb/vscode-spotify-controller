@@ -1,10 +1,33 @@
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
+
+-   [VSCode Spotify Controller](#vscode-spotify-controller)
+    -   [Beta Testing](#beta-testing)
+    -   [Features](#features)
+    -   [Requirements](#requirements)
+    -   [Extension Settings](#extension-settings)
+    -   [API](#api)
+    -   [Installation (Pre-release Version)](#installation-pre-release-version)
+    -   [Commands](#commands)
+    -   [Troubleshooting](#troubleshooting)
+    -   [Known Issues](#known-issues)
+    -   [Authentication \& Authorization Flow](#authentication--authorization-flow)
+    -   [Contributing](#contributing)
+
+<!-- TOC end -->
+
+<!-- TOC --><a name="vscode-spotify-controller"></a>
+
 # VSCode Spotify Controller
 
 The VSCode Spotify Extension is a powerful tool that enhances your coding experience by bringing the control of Spotify directly to your Visual Studio Code editor. With this extension, you can seamlessly manage your Spotify playback, search for music, adjust volume, and more, all without leaving your coding environment.
 
+<!-- TOC --><a name="beta-testing"></a>
+
 ## Beta Testing
 
 The VSCode Spotify Extension is currently in development mode and available for beta testing. If you would like to test the extension, please contact me using any of the methods mentioned on my [GitHub profile](https://github.com/anmoljhamb). I will add you to the list of beta users, and you can start using the extension and provide valuable feedback.
+
+<!-- TOC --><a name="features"></a>
 
 ## Features
 
@@ -26,9 +49,13 @@ The VSCode Spotify Extension is currently in development mode and available for 
 
 -   **Information Alerts**: Stay informed about your Spotify actions with optional information alerts. Receive notifications for successful login, logout, queue additions, and more.
 
+<!-- TOC --><a name="requirements"></a>
+
 ## Requirements
 
 -   **Spotify Premium**: This extension requires a Spotify Premium subscription to use. Please ensure that you have an active Spotify Premium account before using the extension. Free Spotify accounts do not have the necessary access to control playback and perform other advanced features provided by this extension.
+
+<!-- TOC --><a name="extension-settings"></a>
 
 ## Extension Settings
 
@@ -40,6 +67,8 @@ This extension contributes the following settings:
 
 To modify the `spotifyControllerClientId` or `spotifyControllerShowInformationAlerts` settings, open your Visual Studio Code settings (`Preferences > Settings`) and search for "Spotify Controller Client ID" or "Spotify Controller Show Information Alerts".
 
+<!-- TOC --><a name="api"></a>
+
 ## API
 
 The VSCode Spotify Extension utilizes the Spotify Web API to control your Spotify playback directly from Visual Studio Code. The extension communicates with a server component to handle authentication and token refreshing. The server component is responsible for obtaining and managing the access token required for accessing the Spotify Web API.
@@ -47,6 +76,8 @@ The VSCode Spotify Extension utilizes the Spotify Web API to control your Spotif
 To learn more about the server part of the extension, you can visit the [VSCode Spotify Controller Server](https://github.com/anmoljhamb/vscode-spotify-controller-server) repository. The server component plays a crucial role in refreshing the access token and ensuring seamless integration with the Spotify Web API.
 
 Feel free to explore the server repository for more details on how the access token refresh mechanism works and how it enables the extension to control Spotify playback within Visual Studio Code.
+
+<!-- TOC --><a name="installation-pre-release-version"></a>
 
 ## Installation (Pre-release Version)
 
@@ -71,6 +102,8 @@ That's it! You have successfully installed the pre-release version of the VSCode
 If you encounter any issues or have feedback, please report them to the extension's [GitHub repository](https://github.com/anmoljhamb/vscode-spotify-controller).
 
 Thank you for your interest in beta testing the VSCode Spotify Controller Extension. Enjoy controlling Spotify directly from Visual Studio Code!
+
+<!-- TOC --><a name="commands"></a>
 
 ## Commands
 
@@ -103,6 +136,8 @@ Thank you for your interest in beta testing the VSCode Spotify Controller Extens
 -   **Play Liked Songs**: `spotify-controller.playLikedSongs`
 -   **Add Current Song to Liked Songs**: `spotify-controller.addToLikedSongs`
 
+<!-- TOC --><a name="troubleshooting"></a>
+
 ## Troubleshooting
 
 If you encounter any issues while using the VSCode Spotify Extension, you can try the following troubleshooting steps:
@@ -113,6 +148,8 @@ If you encounter any issues while using the VSCode Spotify Extension, you can tr
 
 If the above troubleshooting steps do not resolve your issue, please refer to the "Known Issues" section or consider opening an issue on the GitHub repository for further assistance.
 
+<!-- TOC --><a name="known-issues"></a>
+
 ## Known Issues
 
 -   **Issue: Access Token Expired after Extended Idle Period**: If you leave the instance of VSCode open and your device remains idle for an extended period, such as when it goes to sleep, the interval refresh the access token won't be called, leading to an error stating "Access Token Expired." To resolve this issue, one can simply restart their instance of VSCode, or simply logout and login again.
@@ -122,6 +159,8 @@ If the above troubleshooting steps do not resolve your issue, please refer to th
 -   **Issue: Restart Required after Disabling Informational Alerts**: If you disable the informational alerts in the extension settings, a restart of the VSCode instance is required for the changes to take effect. Please keep this in mind if you choose to disable the alerts.
 
 If you encounter any other issues or have questions about the extension, please consider opening an issue on the GitHub repository for further assistance.
+
+<!-- TOC --><a name="authentication-authorization-flow"></a>
 
 ## Authentication & Authorization Flow
 
@@ -136,6 +175,8 @@ Upon successful login, the user is redirected to the callback URL `http://localh
 To securely obtain the access and refresh tokens, the extension utilizes a separate server, which is responsible for granting access tokens and refreshing them. This server is detailed in the following repository: [https://github.com/anmoljhamb/vscode-spotify-controller-server](https://github.com/anmoljhamb/vscode-spotify-controller-server).
 
 Once the access and refresh tokens are granted, the extension saves them in the global state of VS Code. An interval is set to refresh the access token approximately one minute before it expires. This ensures seamless access to Spotify functionalities even if the user closes and reopens the extension. If a user chooses to log out, the access and refresh tokens are removed from the global state.
+
+<!-- TOC --><a name="contributing"></a>
 
 ## Contributing
 
