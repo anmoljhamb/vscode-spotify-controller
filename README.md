@@ -36,6 +36,14 @@ This extension contributes the following settings:
 
 To modify the `spotifyControllerClientId` or `spotifyControllerShowInformationAlerts` settings, open your Visual Studio Code settings (`Preferences > Settings`) and search for "Spotify Controller Client ID" or "Spotify Controller Show Information Alerts".
 
+## API
+
+The VSCode Spotify Extension utilizes the Spotify Web API to control your Spotify playback directly from Visual Studio Code. The extension communicates with a server component to handle authentication and token refreshing. The server component is responsible for obtaining and managing the access token required for accessing the Spotify Web API.
+
+To learn more about the server part of the extension, you can visit the [VSCode Spotify Controller Server](https://github.com/anmoljhamb/vscode-spotify-controller-server) repository. The server component plays a crucial role in refreshing the access token and ensuring seamless integration with the Spotify Web API.
+
+Feel free to explore the server repository for more details on how the access token refresh mechanism works and how it enables the extension to control Spotify playback within Visual Studio Code.
+
 ## Commands
 
 -   **Login**: `spotify-controller.login`
@@ -82,5 +90,7 @@ If the above troubleshooting steps do not resolve your issue, please refer to th
 -   **Issue: Access Token Expired after Extended Idle Period**: If you leave the instance of VSCode open and your device remains idle for an extended period, such as when it goes to sleep, the interval refresh the access token won't be called, leading to an error stating "Access Token Expired." To resolve this issue, one can simply restart their instance of VSCode, or simply logout and login again.
 
 -   **Issue: Limited Options to Play a Track**: Currently, the Spotify Web API offers only one option to play a track, which erases the current context. This means that if you use this option, any playlist or album you had playing will be cleared, and you will need to start it again. To mitigate this limitation, the extension provides an alternative option that adds the given song to the queue and skips to the next track, preserving the context. However, a bug arises if the user already has songs in the queue. In such cases, the extension will switch to the queued song instead of the intended track.
+
+-   **Issue: Restart Required after Disabling Informational Alerts**: If you disable the informational alerts in the extension settings, a restart of the VSCode instance is required for the changes to take effect. Please keep this in mind if you choose to disable the alerts.
 
 If you encounter any other issues or have questions about the extension, please consider opening an issue on the GitHub repository for further assistance.
