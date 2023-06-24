@@ -123,6 +123,24 @@ If the above troubleshooting steps do not resolve your issue, please refer to th
 
 If you encounter any other issues or have questions about the extension, please consider opening an issue on the GitHub repository for further assistance.
 
+## Authentication Flow
+
+The authentication flow of the application follows these steps:
+
+1. User initiates the login process by executing the login command from the command palette in Visual Studio Code.
+2. The application checks if the user is already logged in. If not, it opens the authorization URL generated using the Spotify Web API Node library. This URL includes the required scopes, redirect URI, and client ID of the Spotify web application.
+3. Once the user successfully logs in, they are redirected to the callback URL: `http://localhost:61234/auth/callback`. The extension hosts a simple Express server on this URL to handle the callback.
+4. Upon receiving the callback, the server checks for the authorization code passed as a query parameter in the URL.
+5. With the authorization code in hand, the server proceeds to obtain the access token and refresh token. This step requires the client ID and client secret, which are securely stored on the server side.
+6. The extension receives the access token and refresh token from the server and saves them in the global state of Visual Studio Code.
+7. To ensure uninterrupted access to the user's Spotify account, the extension sets an interval for token refresh. This interval is typically set to 59 minutes, precisely one minute before the access token expires.
+8. The access and refresh tokens persist in the global state even after the application is closed. When the user opens the application again, the token is automatically refreshed, and the refresh interval is reset.
+9. If a user chooses to log out, the extension simply removes the access and refresh tokens from the global state, setting them to empty values.
+
+For more details on the server-side implementation of token granting and refreshing, you can refer to the [server repository](https://github.com/anmoljhamb/vscode-spotify-controller-server).
+
+Please note that this is a simplified explanation of the authentication flow, and certain technical nuances may have been omitted for brevity.
+
 ## Contributing
 
 Contributions to the VSCode Spotify Controller Server are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/anmoljhamb/vscode-spotify-controller).
