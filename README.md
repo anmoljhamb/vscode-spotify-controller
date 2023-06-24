@@ -34,7 +34,38 @@ This extension contributes the following settings:
 
 -   **Spotify Controller: Show Information Alerts**: Show information alerts when a given action is successful. By default, this setting is enabled (`true`). If you find the information alerts to be disruptive or unnecessary, you can disable them by setting this option to `false`.
 
-To modify the `spotifyControllerClientId` or `spotifyControllerShowInformationAlerts` settings, open your Visual Studio Code settings (`Preferences > Settings`) and search for "Spotify Controller: Client ID" or "Spotify Controller: Show Information Alerts".
+To modify the `spotifyControllerClientId` or `spotifyControllerShowInformationAlerts` settings, open your Visual Studio Code settings (`Preferences > Settings`) and search for "Spotify Controller Client ID" or "Spotify Controller Show Information Alerts".
+
+## Commands
+
+-   **Login**: `spotify-controller.login`
+-   **Logout**: `spotify-controller.logout`
+-   **Play/Pause**: `spotify-controller.playPause`
+-   **Pause**: `spotify-controller.pause`
+-   **Play**: `spotify-controller.play`
+-   **Shuffle Off**: `spotify-controller.shuffleOff`
+-   **Shuffle On**: `spotify-controller.shuffleOn`
+-   **Set Repeat Off**: `spotify-controller.setRepeatOff`
+-   **Set Repeat to Current Context**: `spotify-controller.setRepeatContext`
+-   **Set Repeat to Track**: `spotify-controller.setRepeatTrack`
+-   **Next Song**: `spotify-controller.nextSong`
+-   **Seek**: `spotify-controller.seek`
+-   **Add To Queue Without Confirmation**: `spotify-controller.addToQueueWithoutConfirmation`
+-   **Add To Queue**: `spotify-controller.addToQueue`
+-   **Play Track With In Context**: `spotify-controller.playTrack`
+-   **Play Track With In Context Without Confirmation**: `spotify-controller.playTrackWithoutConfirmation`
+-   **Play Track**: `spotify-controller.playTrackWithoutContext`
+-   **Play Track Without Confirmation**: `spotify-controller.playTrackWithoutContextWithoutConfirmation`
+-   **Play Artist**: `spotify-controller.playArtist`
+-   **Switch Device**: `spotify-controller.switchDevice`
+-   **Previous Song**: `spotify-controller.prevSong`
+-   **Set Volume**: `spotify-controller.setVolume`
+-   **Copy Current Song to Clipboard**: `spotify-controller.copyToClipboard`
+-   **Remove Current Song from Liked Songs**: `spotify-controller.removeFromLikedSongs`
+-   **Play Playlist**: `spotify-controller.playPlaylist`
+-   **Play Top Songs**: `spotify-controller.playTopSongs`
+-   **Play Liked Songs**: `spotify-controller.playLikedSongs`
+-   **Add Current Song to Liked Songs**: `spotify-controller.addToLikedSongs`
 
 ## Known Issues
 
