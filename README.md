@@ -94,3 +94,7 @@ If the above troubleshooting steps do not resolve your issue, please refer to th
 -   **Issue: Restart Required after Disabling Informational Alerts**: If you disable the informational alerts in the extension settings, a restart of the VSCode instance is required for the changes to take effect. Please keep this in mind if you choose to disable the alerts.
 
 If you encounter any other issues or have questions about the extension, please consider opening an issue on the GitHub repository for further assistance.
+
+## Contributing
+
+Contributions to the VSCode Spotify Controller Server are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/anmoljhamb/vscode-spotify-controller).
