@@ -4,6 +4,8 @@
 
 The VSCode Spotify Extension is a powerful tool that enhances your coding experience by bringing the control of Spotify directly to your Visual Studio Code editor. With this extension, you can seamlessly manage your Spotify playback, search for music, adjust volume, and more, all without leaving your coding environment.
 
+![screenshot](./screenshot.jpeg)
+
 ## Table Of Content
 
 -   [VSCode Spotify Controller](#vscode-spotify-controller)
